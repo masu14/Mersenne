@@ -6,11 +6,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     Rigidbody2D rbody;
-    float axisH = 0.0f;             //入力
+    float axisH = 0.0f;                    //入力
     public bool playerxDirection = true;   //右向きかどうかの判定
     public bool playerRight = true;        //解除コード生成の向き
 
-    private bool goShot = true;            //解除コード使用可能判定
+    private bool goShot = true;                         //解除コードフラグ
+    [SerializeField] private float goShotTime = 1.5f;   //解除コード待機時間
 
     
 
@@ -21,16 +22,20 @@ public class PlayerController : MonoBehaviour
     bool goJump = false;            //ジャンプ開始フラグ
     bool onGround = false;          //接地フラグ
 
-    [SerializeField] private ShotController shotPrefab;     //shotPrefabを指定
+    [SerializeField] private ShotController shotBluePrefab;     //shotPrefabを指定
+    [SerializeField] private ShotController shotGreenPrefab;
+    [SerializeField] private ShotController shotRedPrefab;
     Vector3 shotPoint;                                      //解除コードの位置
+
+    private int shotSwitch = 0;
 
     
 
     void Start()
     {
-        rbody = GetComponent<Rigidbody2D>();        //PlayerのRigidbody2D取得
+        rbody = GetComponent<Rigidbody2D>();                        //PlayerのRigidbody2D取得
 
-        shotPoint = transform.Find("ShotPoint").localPosition;
+        shotPoint = transform.Find("ShotPoint").localPosition;      //プレイヤーの子オブジェクトの位置取得
     }
 
     
@@ -58,12 +63,22 @@ public class PlayerController : MonoBehaviour
             Jump(); //ジャンプメソッドを呼び出す
         }
 
+        //解除コード切り替え　blue=0, green=1, red=2
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            shotSwitch++;
+            if (shotSwitch > 2)
+            {
+                shotSwitch = 0;
+            }
+        }
+
         //解除コード発射
         if(Input.GetButtonDown("Fire1")　&& goShot == true)
         {
-            Shot(); //ショットメソッドを呼び出す
-            goShot = false;
-            Invoke(nameof(GoShot), 2.0f);
+            Shot();                                     //ショットメソッドを呼び出す
+            goShot = false;                             //解除コードフラグを下ろす
+            Invoke(nameof(GoShot), goShotTime);         //解除コード待機時間経過後、GoShotメソッドを呼び出す
         }
 
         
@@ -98,22 +113,54 @@ public class PlayerController : MonoBehaviour
         Debug.Log("ジャンプボタン押し");
     }
 
-    public void Shot()
+    public void Shot()      //解除コード生成
     {
-        if(playerxDirection)
+        if(shotSwitch == 0) //青解除コードプレハブ生成
         {
-            Instantiate(this.shotPrefab, transform.position + shotPoint, Quaternion.identity);    //解除コード生成
-            playerRight = true;
+            if (playerxDirection)
+            {
+                Instantiate(this.shotBluePrefab, transform.position + shotPoint, Quaternion.identity);    //右向き
+                playerRight = true;
+            }
+            else
+            {
+                Instantiate(this.shotBluePrefab, transform.position + new Vector3(-shotPoint.x, shotPoint.y, 0), Quaternion.identity);    //左向き
+                playerRight = false;
+            }
         }
-        else
+
+        if(shotSwitch == 1) //緑解除コードプレハブ生成
         {
-            Instantiate(this.shotPrefab, transform.position + new Vector3(-shotPoint.x, shotPoint.y, 0), Quaternion.identity);    //解除コード生成
-            playerRight = false;
+            if (playerxDirection)
+            {
+                Instantiate(this.shotGreenPrefab, transform.position + shotPoint, Quaternion.identity);    //右向き
+                playerRight = true;
+            }
+            else
+            {
+                Instantiate(this.shotGreenPrefab, transform.position + new Vector3(-shotPoint.x, shotPoint.y, 0), Quaternion.identity);    //左向き
+                playerRight = false;
+            }
         }
+
+        if(shotSwitch == 2) //赤解除コードプレハブ生成
+        {
+            if (playerxDirection)
+            {
+                Instantiate(this.shotRedPrefab, transform.position + shotPoint, Quaternion.identity);    //右向き
+                playerRight = true;
+            }
+            else
+            {
+                Instantiate(this.shotRedPrefab, transform.position + new Vector3(-shotPoint.x, shotPoint.y, 0), Quaternion.identity);    //左向き
+                playerRight = false;
+            }
+        }
+        
     }
 
     public void GoShot()
     {
-        goShot = true;
+        goShot = true;      //解除コードフラグを立てる
     }
 }

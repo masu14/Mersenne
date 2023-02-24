@@ -7,30 +7,38 @@ public class ShotController : MonoBehaviour
     private GameObject player;
     private PlayerController playerController;
 
+    [SerializeField] private float shotSpeed = 0.02f;   //解除コードの速さ
+    [SerializeField] private float shotTime = 1.0f;     //解除コードの消滅までの時間
+
     
 
     private void Start()
     {
-        player = GameObject.FindWithTag("Player");
-        playerController = player.GetComponent<PlayerController>();
+        player = GameObject.FindWithTag("Player");                      //プレイヤーオブジェクト取得
+        playerController = player.GetComponent<PlayerController>();     //プレイヤーコントローラー取得
     }
     private void Update()
     {
-        if(playerController.playerRight == true)
+        if(playerController.playerRight == true)                        //スプライトが右向きのとき
         {
-            transform.Translate(0.02f, 0, 0);
+            ShotMove(shotSpeed);
             Debug.Log("右向きショット");
         }
-        else
+        else                                                            //スプライトが左向きのとき
         {
-            transform.Translate(-0.02f, 0, 0);
+            ShotMove(-shotSpeed);
             Debug.Log("左向きショット");
         }
     }
 
     private void FixedUpdate()
     {
-        Destroy(gameObject, 1.0f);
+        Destroy(gameObject, shotTime);                                      //一定時間経過後解除コード消滅
+    }
+
+    private void ShotMove(float shotSpeed)                             //解除コードの移動
+    {
+        transform.Translate(shotSpeed, 0, 0);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
