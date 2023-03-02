@@ -8,6 +8,10 @@ TagManager:
   - Shot_green
   - Shot_red
   - LuminaObject
+  - Barrier_blue
+  - Barrier_green
+  - Barrier_red
+  - StageChenger
   layers:
   - Default
   - TransparentFX

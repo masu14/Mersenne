@@ -9,7 +9,10 @@ using System.Collections.Specialized;
 public class GimmickController : MonoBehaviour
 {
     [SerializeField] private Light2D pointLight;
-    // [SerializeField] private LuminaBoardController luminaBoard;
+    public bool lightBlue = false;
+    public bool lightGreen = false;
+    public bool lightRed = false;
+
 
     private Color shotColor;
 
@@ -22,23 +25,22 @@ public class GimmickController : MonoBehaviour
       if (collision.gameObject.tag == "Shot_blue")
         {
             pointLight.color = new Color32(127, 255, 255, 255);
-            shotColor = pointLight.color;
-            DoLumina();
-            
+            ChengeColorOfLight2D(collision, pointLight.color);
+            lightBlue = true;
         }
 
       if (collision.gameObject.tag == "Shot_green")
         {
             pointLight.color = new Color32(56, 241, 104, 255);
-            shotColor = pointLight.color;
-            DoLumina();
+            ChengeColorOfLight2D(collision, pointLight.color);
+            lightGreen = true;
         }
 
       if (collision.gameObject.tag == "Shot_red")
         {
             pointLight.color = new Color32(231, 69, 69, 255);
-            shotColor = pointLight.color;
-            DoLumina();
+            ChengeColorOfLight2D(collision, pointLight.color);
+            lightRed = true;
         }
         Debug.Log("ÉMÉ~ÉbÉNçÏìÆ");
 
@@ -67,5 +69,16 @@ public class GimmickController : MonoBehaviour
         inf.EventCall(shotColor);
         Debug.Log("CallMyEvent");
     }
-   
+
+    private void ChengeColorOfLight2D(Collision2D gameObject, Color32 color)
+    {
+        for (int i = 1; i < transform.childCount; i++)
+        {
+            GameObject light2DObject = this.transform.GetChild(i).gameObject.GetComponent<Transform>().transform.GetChild(0).gameObject;
+            light2DObject.GetComponent<Light2D>().color = color;
+            Debug.Log(i);
+        }
+        Debug.Log("chengeColor");
+    }
+
 }
