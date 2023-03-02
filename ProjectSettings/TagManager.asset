@@ -11,7 +11,7 @@ TagManager:
   - Barrier_blue
   - Barrier_green
   - Barrier_red
-  - StageChenger
+  - Stage
   layers:
   - Default
   - TransparentFX
