@@ -46,13 +46,11 @@ public class PlayerController : MonoBehaviour
         //Œü‚«‚Ì’²®
         if(axisH > 0.0f)        //‰EˆÚ“®
         {
-            Debug.Log("‰EˆÚ“®");
             transform.localScale = new Vector2(1, 1);
             playerxDirection = true;
         }
         else if(axisH < 0.0f)   //¶ˆÚ“®
         {
-            Debug.Log("¶ˆÚ“®");
             transform.localScale = new Vector2(-1, 1);  //¶‰E”½“]‚³‚¹‚é
             playerxDirection = false;
         }

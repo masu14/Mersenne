@@ -7,6 +7,7 @@ TagManager:
   - Shot_blue
   - Shot_green
   - Shot_red
+  - LuminaObject
   layers:
   - Default
   - TransparentFX

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1553713751919469557}
   m_Layer: 0
   m_Name: GimmickObject
-  m_TagString: Untagged
+  m_TagString: LuminaObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointLight: {fileID: 1553713752058941003}
+  luminaBoard: {fileID: 1713778215267929017, guid: 1418a78a6342e9246b8f9d4f36c653e4, type: 3}
 --- !u!61 &1553713751919469557
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -22,12 +22,12 @@ public class ShotController : MonoBehaviour
         if(playerController.playerRight == true)                        //スプライトが右向きのとき
         {
             ShotMove(shotSpeed);
-            Debug.Log("右向きショット");
+            
         }
         else                                                            //スプライトが左向きのとき
         {
             ShotMove(-shotSpeed);
-            Debug.Log("左向きショット");
+            
         }
     }
 
