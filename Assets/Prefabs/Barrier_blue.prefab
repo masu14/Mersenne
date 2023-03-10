@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 8918772474515579901}
   - component: {fileID: 8918772474515579900}
   - component: {fileID: 8918772474515579903}
-  - component: {fileID: 8918772474515579902}
+  - component: {fileID: 2446718739560953150}
   m_Layer: 0
   m_Name: Barrier_blue
   m_TagString: Barrier_blue
@@ -186,7 +186,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -224,7 +224,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8918772474515579902
+--- !u!114 &2446718739560953150
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -233,7 +233,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 8918772474515579889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b59d9fde5b23bd41afda4a7e8a7bc17, type: 3}
+  m_Script: {fileID: 11500000, guid: 89f158afb35469d4593cc73a3689bd67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gimmickController: {fileID: 0}
+  targetGimmickController: {fileID: 0}
+  freeFormLight: {fileID: 8918772473468432704}

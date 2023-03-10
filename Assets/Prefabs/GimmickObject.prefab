@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -100,7 +100,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointLight: {fileID: 1553713752058941003}
-  luminaBoard: {fileID: 1713778215267929017, guid: 1418a78a6342e9246b8f9d4f36c653e4, type: 3}
+  lightBlue: 0
+  lightGreen: 0
+  lightRed: 0
+  shotCollision: 0
+  barrierObject: {fileID: 0}
+  luminaBoard: {fileID: 0}
 --- !u!61 &1553713751919469557
 BoxCollider2D:
   m_ObjectHideFlags: 0

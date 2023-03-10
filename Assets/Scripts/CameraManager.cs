@@ -9,14 +9,14 @@ public class CameraManager : MonoBehaviour
     private const int cameraWidth = 18;                     //画面横幅
     private const int cameraHeight = 10;                    //画面縦幅
     public int nowStage;                                    //プレイヤーのいるステージ番号(nowStageに対応)
-    private float edgeRight, edgeLeft, edgeUp, EdgeDown;
-    private int tmp;
+    private float edgeRight, edgeLeft, edgeUp, EdgeDown;    //カメラに映る端の座標成分
+    private int tmp;                                        
     private GameObject[] rawStages;
     private GameObject[] stages;
 
-    // Start is called before the first frame update
     void Start()
     {
+        //シーン中のすべてのStageオブジェクトを取得、ナンバリングする
         rawStages = GameObject.FindGameObjectsWithTag("Stage");
 
         stages = new GameObject[stageMaxnum];
@@ -26,10 +26,9 @@ public class CameraManager : MonoBehaviour
             tmp = rawStages[i].GetComponent<StageManager>().stageNum;
 
             stages[tmp] = rawStages[i];
-
+            
         }
 
-        
     }
 
     
@@ -40,6 +39,7 @@ public class CameraManager : MonoBehaviour
         edgeUp = stages[nowStage].transform.position.y + cameraHeight / 2;
         EdgeDown = stages[nowStage].transform.position.y - cameraHeight / 2;
 
+        //カメラ更新
         if (edgeLeft >= transform.position.x)
         {
             transform.position += cameraWidth * Vector3.right;

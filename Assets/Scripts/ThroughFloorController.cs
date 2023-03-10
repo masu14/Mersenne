@@ -5,7 +5,7 @@ using UnityEngine;
 public class ThroughFloorController : MonoBehaviour
 {
     PlatformEffector2D platformEffector2D;
-    // Start is called before the first frame update
+    
     void Start()
     {
         platformEffector2D = GetComponent<PlatformEffector2D>();
