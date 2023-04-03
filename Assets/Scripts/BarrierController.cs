@@ -33,24 +33,33 @@ public class BarrierController : MonoBehaviour
     {
         
         
+
         //Gimmickオブジェクトの色と同じとき消滅
         if (gimmickController.shotCollision && gameObject.tag == "Barrier_red")      //赤に発光しているとき
         {
             SwitchBarrierLight(gimmickController.lightRed, colorRed);
             
+            Debug.Log("Barrier_red発光");
         }
 
         if (gimmickController.shotCollision && gameObject.tag == "Barrier_blue")    //青に発光しているとき
         {
             SwitchBarrierLight(gimmickController.lightBlue, colorBlue);
+            
+            Debug.Log("Barrier_blue発光");
         }
 
         if (gimmickController.shotCollision && gameObject.tag == "Barrier_green")    //緑に発光しているとき
         {
             SwitchBarrierLight(gimmickController.lightGreen, colorGreen);
+            
+            Debug.Log("Barrier_green発光");
         }
         
-        
+        if(gimmickController.shotCollision)
+        {
+            gimmickController.shotCollision = false;
+        }
     }
 
     public void SwitchCallBlue()

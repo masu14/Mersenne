@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rbody;
     float axisH = 0.0f;                    //入力
     public bool playerxDirection = true;   //右向きかどうかの判定
-    public bool playerRight = true;        //解除コード生成の向き
+    public bool shotxDirection = true;        //解除コード生成の向き
 
     private bool goShot = true;                         //解除コードフラグ
     [SerializeField] private float goShotTime = 1.5f;   //解除コード待機時間
@@ -118,12 +118,12 @@ public class PlayerController : MonoBehaviour
             if (playerxDirection)
             {
                 Instantiate(this.shotBluePrefab, transform.position + shotPoint, Quaternion.identity);    //右向き
-                playerRight = true;
+                shotxDirection = true;
             }
             else
             {
                 Instantiate(this.shotBluePrefab, transform.position + new Vector3(-shotPoint.x, shotPoint.y, 0), Quaternion.identity);    //左向き
-                playerRight = false;
+                shotxDirection = false;
             }
         }
 
@@ -132,12 +132,12 @@ public class PlayerController : MonoBehaviour
             if (playerxDirection)
             {
                 Instantiate(this.shotGreenPrefab, transform.position + shotPoint, Quaternion.identity);    //右向き
-                playerRight = true;
+                shotxDirection = true;
             }
             else
             {
                 Instantiate(this.shotGreenPrefab, transform.position + new Vector3(-shotPoint.x, shotPoint.y, 0), Quaternion.identity);    //左向き
-                playerRight = false;
+                shotxDirection = false;
             }
         }
 
@@ -146,12 +146,12 @@ public class PlayerController : MonoBehaviour
             if (playerxDirection)
             {
                 Instantiate(this.shotRedPrefab, transform.position + shotPoint, Quaternion.identity);    //右向き
-                playerRight = true;
+                shotxDirection = true;
             }
             else
             {
                 Instantiate(this.shotRedPrefab, transform.position + new Vector3(-shotPoint.x, shotPoint.y, 0), Quaternion.identity);    //左向き
-                playerRight = false;
+                shotxDirection = false;
             }
         }
         

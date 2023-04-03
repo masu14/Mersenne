@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 8918772474515579900}
   - component: {fileID: 8918772474515579903}
   - component: {fileID: 2446718739560953150}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Barrier_blue
   m_TagString: Barrier_blue
   m_Icon: {fileID: 0}

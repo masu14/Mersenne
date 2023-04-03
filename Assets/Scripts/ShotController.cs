@@ -19,7 +19,7 @@ public class ShotController : MonoBehaviour
     }
     private void Update()
     {
-        if(playerController.playerRight == true)                        //スプライトが右向きのとき
+        if(playerController.shotxDirection == true)                        //スプライトが右向きのとき
         {
             ShotMove(shotSpeed);
             

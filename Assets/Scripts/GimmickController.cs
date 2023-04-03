@@ -37,11 +37,11 @@ public class GimmickController : MonoBehaviour
             
             pointLight.color = new Color32(127, 255, 255, 255);
             ChengeColorOfLight2D(collision, pointLight.color);
-            
+            Debug.Log("collisionBlue");
             if(lightBlue)
             {
                 lightBlue = false;
-
+                Debug.Log("lightBlueƒtƒ‰ƒO");
             }
             else
             {
@@ -68,9 +68,8 @@ public class GimmickController : MonoBehaviour
         
 
 
-      if (collision.gameObject.tag == "Shot_red")
+        if (collision.gameObject.tag == "Shot_red")
         {
-            shotCollision = true;
             pointLight.color = new Color32(231, 69, 69, 255);
             ChengeColorOfLight2D(collision, pointLight.color);
             
