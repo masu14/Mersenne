@@ -16,7 +16,12 @@ namespace Merusenne.Player
 
         private bool _goJump = false;                       //ジャンプフラグ
         private bool _onGround = false;                     //接地フラグ
-        
+
+        private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);
+        public IObservable<bool> Observable
+        {
+            get { return _playerxDir; }
+        }
         
 
         private void Awake()
@@ -34,10 +39,12 @@ namespace Merusenne.Player
             if(_axisH > 0.0f)
             {
                 transform.localScale = new Vector2(1, 1);
+                _playerxDir.Value = true;
             }
             else if(_axisH < 0.0f)
             {
                 transform.localScale = new Vector2(-1, 1);
+                _playerxDir.Value = false;
             }
 
             //ジャンプ

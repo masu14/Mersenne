@@ -694,6 +694,7 @@ GameObject:
   - component: {fileID: 640999642}
   - component: {fileID: 640999641}
   - component: {fileID: 640999645}
+  - component: {fileID: 640999646}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -819,10 +820,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  _jump: 20
+  _jump: 39
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
+--- !u!114 &640999646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640999640}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe754af74ffe8943b285ce0aec4d263, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _goShotTime: 1.5
+  _shotBluePrefab: {fileID: -4115163352299950596, guid: d62a84915e1c4ef46acff50e444b36e7, type: 3}
+  _shotGreenPrefab: {fileID: 312232937777787888, guid: 1ec8f6c6b0b16f240a2eb816657d4017, type: 3}
+  _shotRedPrefab: {fileID: 3892155736186381614, guid: 79e0b23718846be4093a45954616a8fe, type: 3}
+  _playerMove: {fileID: 640999645}
 --- !u!1 &716887418 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2657783439693607625, guid: 1418a78a6342e9246b8f9d4f36c653e4, type: 3}

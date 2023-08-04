@@ -1,33 +1,36 @@
+using Merusenne.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class ShotController : MonoBehaviour
 {
     private GameObject player;
-    private PlayerController playerController;
 
     [SerializeField] private float shotSpeed = 0.02f;   //解除コードの速さ
     [SerializeField] private float shotTime = 1.0f;     //解除コードの消滅までの時間
+    private PlayerMove _playerMove;
 
-    
+    private bool _shotxDir;
+
+
 
     private void Start()
     {
         player = GameObject.FindWithTag("Player");                      //プレイヤーオブジェクト取得
-        playerController = player.GetComponent<PlayerController>();     //プレイヤーコントローラー取得
+        _playerMove = player.GetComponent<PlayerMove>();     //プレイヤーコントローラー取得
     }
     private void Update()
     {
-        if(playerController.shotxDirection == true)                        //スプライトが右向きのとき
+        _playerMove.Observable.Subscribe(xDir => _shotxDir = xDir);
+        if (_shotxDir == true)                        //スプライトが右向きのとき
         {
             ShotMove(shotSpeed);
-            
         }
         else                                                            //スプライトが左向きのとき
         {
-            ShotMove(-shotSpeed);
-            
+            ShotMove(-shotSpeed);  
         }
     }
 
