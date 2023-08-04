@@ -44,12 +44,12 @@ public class PlayerController : MonoBehaviour
         axisH = Input.GetAxisRaw("Horizontal");     //水平方向の入力をチェックする
 
         //向きの調整
-        if(axisH > 0.0f)        //右移動
+        if(axisH > 0.0f)        //右向き
         {
             transform.localScale = new Vector2(1, 1);
             playerxDirection = true;
         }
-        else if(axisH < 0.0f)   //左移動
+        else if(axisH < 0.0f)   //左向き
         {
             transform.localScale = new Vector2(-1, 1);  //左右反転させる
             playerxDirection = false;

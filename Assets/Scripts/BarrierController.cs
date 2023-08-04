@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.UIElements;
 
 public class BarrierController : MonoBehaviour
 {
@@ -32,7 +28,7 @@ public class BarrierController : MonoBehaviour
     void Update()
     {
         
-        
+        /*
 
         //Gimmickオブジェクトの色と同じとき消滅
         if (gimmickController.shotCollision && gameObject.tag == "Barrier_red")      //赤に発光しているとき
@@ -60,6 +56,8 @@ public class BarrierController : MonoBehaviour
         {
             gimmickController.shotCollision = false;
         }
+
+        */
     }
 
     public void SwitchCallBlue()

@@ -128,6 +128,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6055194560633482830, guid: 55e8de7e180240c4890580deca6e26d6, type: 3}
   m_PrefabInstance: {fileID: 1351963176}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &85850823 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9145697069719757483, guid: f1295a75c31cb4144a8e2d4f9d3206f9, type: 3}
+  m_PrefabInstance: {fileID: 860999049}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &178794926
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,20 +815,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 640999640}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f37fc228976657b48a98781c60834638, type: 3}
+  m_Script: {fileID: 11500000, guid: f94f3e06cfa93474cb075ba9100edcd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerxDirection: 1
-  shotxDirection: 1
-  goShotTime: 1
-  speed: 5
-  jump: 37
-  groundLayer:
+  speed: 10
+  _jump: 20
+  _groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  shotBluePrefab: {fileID: -4115163352299950596, guid: d62a84915e1c4ef46acff50e444b36e7, type: 3}
-  shotGreenPrefab: {fileID: 312232937777787888, guid: 1ec8f6c6b0b16f240a2eb816657d4017, type: 3}
-  shotRedPrefab: {fileID: 3892155736186381614, guid: 79e0b23718846be4093a45954616a8fe, type: 3}
 --- !u!1 &716887418 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2657783439693607625, guid: 1418a78a6342e9246b8f9d4f36c653e4, type: 3}
@@ -6058,6 +6057,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9145697069719757480, guid: f1295a75c31cb4144a8e2d4f9d3206f9, type: 3}
   m_PrefabInstance: {fileID: 860999049}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1467806528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85850823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3fc30b500ee9f4ab2fd61b5a09e275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1488886929
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6318,7 +6329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1553713751919469555, guid: b8d09aa5e7517f24db304916ba1dfeb8, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1553713751919469555, guid: b8d09aa5e7517f24db304916ba1dfeb8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6567,7 +6578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8487181669137715877, guid: 8808d77e4f74449459b51adb2b4811fc, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8487181669137715877, guid: 8808d77e4f74449459b51adb2b4811fc, type: 3}
       propertyPath: m_LocalScale.x
@@ -6824,6 +6835,10 @@ PrefabInstance:
       propertyPath: barrierObject
       value: 
       objectReference: {fileID: 1580816161}
+    - target: {fileID: 1553713751919469554, guid: b8d09aa5e7517f24db304916ba1dfeb8, type: 3}
+      propertyPath: parentBarrier
+      value: 
+      objectReference: {fileID: 85850823}
     - target: {fileID: 1553713751919469555, guid: b8d09aa5e7517f24db304916ba1dfeb8, type: 3}
       propertyPath: m_RootOrder
       value: 0
