@@ -1,107 +1,113 @@
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using UniRx;
 
 public class BarrierController : MonoBehaviour
 {
-    [SerializeField] private GameObject targetGimmickController;               //Gimmickオブジェクト取得
-    private GimmickController gimmickController;
-    [SerializeField] private Light2D freeFormLight;
-    BoxCollider2D boxCollider2D;
+    private Light2D _barrierLight;                              //子オブジェクトのLight
 
-                                             //Barrierオブジェクト発光フラグ
+    private GimmickController grandGimmick;                     //祖父オブジェクトのGimmickController
+    [SerializeField] private bool _barrierActive = false;       //Barrier明滅フラグ
 
-    Color32 colorRed = new Color32(231, 69, 69, 255);
-    Color32 colorBlue = new Color32(127, 255, 255, 255);
-    Color32 colorGreen = new Color32(56, 241, 104, 255);
+    private Color32 _blue = new Color32(127, 255, 255, 255);    //青
+    private Color32 _green = new Color32(56, 241, 104, 255);    //緑
+    private Color32 _red = new Color32(231, 69, 69, 255);       //赤
 
-
+    BoxCollider2D boxCollider2D;                                //アクティブ状態の管理に使用
 
     private void Start()
     {
-        gimmickController = targetGimmickController.GetComponent<GimmickController>();
-        boxCollider2D = GetComponent<BoxCollider2D>();                            //BoxCollieder2D取得
-        
-        
+        _barrierLight = transform.GetChild(0).gameObject.GetComponent<Light2D>();
+        boxCollider2D = transform.GetComponent<BoxCollider2D>();
+        grandGimmick = transform.parent.gameObject.transform.parent.gameObject.GetComponent<GimmickController>();
 
-    }
-
-    void Update()
-    {
-        
-        /*
-
-        //Gimmickオブジェクトの色と同じとき消滅
-        if (gimmickController.shotCollision && gameObject.tag == "Barrier_red")      //赤に発光しているとき
+        if (grandGimmick != null)
         {
-            SwitchBarrierLight(gimmickController.lightRed, colorRed);
-            
-            Debug.Log("Barrier_red発光");
-        }
-
-        if (gimmickController.shotCollision && gameObject.tag == "Barrier_blue")    //青に発光しているとき
-        {
-            SwitchBarrierLight(gimmickController.lightBlue, colorBlue);
-            
-            Debug.Log("Barrier_blue発光");
-        }
-
-        if (gimmickController.shotCollision && gameObject.tag == "Barrier_green")    //緑に発光しているとき
-        {
-            SwitchBarrierLight(gimmickController.lightGreen, colorGreen);
-            
-            Debug.Log("Barrier_green発光");
-        }
-        
-        if(gimmickController.shotCollision)
-        {
-            gimmickController.shotCollision = false;
-        }
-
-        */
-    }
-
-    public void SwitchCallBlue()
-    {
-        if(gameObject.tag == "Barrier_blue")
-        {
-            SwitchBarrierLight(gimmickController.lightBlue, colorBlue);
-        }
-
-    }
-
-    public void SwitchCallGreen()
-    {
-        if(gameObject.tag == "Barrier_green")
-        {
-            SwitchBarrierLight(gimmickController.lightGreen, colorGreen);
-        }
-        
-    }
-
-    public void SwitchCallRed()
-    {
-        if(gameObject.tag == "Barrier_red")
-        {
-            SwitchBarrierLight(gimmickController.lightRed, colorRed);
-        }
-        
-    }
-
-
-    private void SwitchBarrierLight(bool barrierLight, Color32 color)
-    {
-        if(barrierLight)
-        {
-            boxCollider2D.enabled = false;
-            freeFormLight.color = new Color32(0, 0, 0, 0);
-            
+            Debug.Log("祖父オブジェクトの名前：" + grandGimmick.name);
         }
         else
         {
-            boxCollider2D.enabled = true;
-            freeFormLight.color = color;
+            Debug.Log("祖父オブジェクトはいません" + gameObject.name);
+        }
+
+        if (grandGimmick != null)
+        {
+            grandGimmick.OnCollisionObj.Subscribe(SwitchBarrierLight);      //ショット衝突の受信
+        }
+
+        //Barrierの初期化
+        if (_barrierActive == false)
+        {
+            boxCollider2D.enabled = false;
+            _barrierLight.color = new Color32(0, 0, 0, 0);
+        }
+    }
+
+    
+    private void SwitchBarrierLight(GameObject gameObject)
+    {
+        //青Barrierの発光、消滅
+        if (gameObject.tag == "Shot_blue")
+        {
+            if(this.gameObject.tag == "Barrier_blue")
+            {
+                if (_barrierActive) //消滅
+                {
+                    boxCollider2D.enabled = false;
+                    _barrierLight.color = new Color32(0, 0, 0, 0);
+                    _barrierActive = !_barrierActive;
+                }
+                else　              //発光
+                {
+                    boxCollider2D.enabled = true;
+                    _barrierLight.color = _blue;
+                    _barrierActive = !_barrierActive;
+                }
+            }
             
         }
-        
-    }
+
+        //緑Barrierの発光、消滅
+        if (gameObject.tag == "Shot_green")
+        {
+            if (this.gameObject.tag == "Barrier_green")
+            {
+                if (_barrierActive)
+                {
+                    boxCollider2D.enabled = false;
+                    _barrierLight.color = new Color32(0, 0, 0, 0);
+                    _barrierActive = !_barrierActive;
+                }
+                else
+                {
+                    boxCollider2D.enabled = true;
+                    _barrierLight.color = _green;
+                    _barrierActive = !_barrierActive;
+                }
+            }
+
+        }
+        //赤Barrierの発光、消滅
+        if (gameObject.tag == "Shot_red")
+        {
+            if (this.gameObject.tag == "Barrier_red")
+            {
+                
+                if (_barrierActive) //消滅
+                {
+                    boxCollider2D.enabled = false;
+                    _barrierLight.color = new Color32(0, 0, 0, 0);
+                    _barrierActive = !_barrierActive;
+                }
+                else　             //発光
+                {
+                    boxCollider2D.enabled = true;
+                    _barrierLight.color = _red;
+                    _barrierActive = !_barrierActive;
+                }
+            }
+
+        }
+    }   
+    
 }

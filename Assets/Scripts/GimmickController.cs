@@ -1,3 +1,5 @@
+using System;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -5,15 +7,19 @@ public class GimmickController : MonoBehaviour
 {
     [SerializeField] private Light2D pointLight;   //子オブジェクトのGimmickLight
     [SerializeField] private GameObject parentBarrier;
+        
+    private Color32 _blue = new Color32(127, 255, 255, 255);
+    private Color32 _green = new Color32(56, 241, 104, 255);
+    private Color32 _red = new Color32(231, 69, 69, 255);
+    //UniRxのSubjectを定義
+    private Subject<Color32> _collisionColor = new Subject<Color32>();
+    private Subject<GameObject> _collisionObject = new Subject<GameObject>();
+
     
 
-    private bool _isSwitch;
-
-    public bool lightBlue = false;
-    public bool lightGreen = false;
-    public bool lightRed = false;
-
-    public bool shotCollision = false;
+    //LuminaBoard,BarrierからこのSubjectを購読するためのプロパティを公開
+    public IObservable<Color32> OnCollision => _collisionColor;
+    public IObservable<GameObject> OnCollisionObj => _collisionObject;
 
     public GameObject luminaBoard;
 
@@ -24,57 +30,33 @@ public class GimmickController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        int layer = collision.gameObject.layer;     //8:Shotレイヤーに接触したときスイッチを切り替える
-        if (layer == 8)
-        {
-            _isSwitch = !_isSwitch;
-        }
-
-
-        shotCollision = true;
         //shotの色と同じ色に発光
         if (collision.gameObject.tag == "Shot_blue")
         {
-            //GimmickObject,LuminaBoardが青に発光
-            pointLight.color = new Color32(127, 255, 255, 255);
-            ChengeColorOfLight2D(pointLight.color);
+            //GimmickObjectが青に発光
+            pointLight.color = _blue;
             
+            //UniRx処理
+            _collisionColor.OnNext(_blue);
+            _collisionObject.OnNext(collision.gameObject);
 
         }
 
         if (collision.gameObject.tag == "Shot_green")
         {
-            
-            pointLight.color = new Color32(56, 241, 104, 255);
-            ChengeColorOfLight2D(pointLight.color);
-            
-            if (lightGreen)
-            {
-                lightGreen = false;
 
-            }
-            else
-            {
-                lightGreen = true;
-            }
+            pointLight.color = _green;
+            _collisionColor.OnNext(_green);
+            _collisionObject.OnNext(collision.gameObject);
         }
         
 
 
         if (collision.gameObject.tag == "Shot_red")
         {
-            pointLight.color = new Color32(231, 69, 69, 255);
-            ChengeColorOfLight2D(pointLight.color);
-            
-            if(lightRed)
-            {
-                lightRed = false;
-            }
-            else
-            {
-                lightRed = true;
-            }
-            
+            pointLight.color = _red;
+            _collisionColor.OnNext(_red);
+            _collisionObject.OnNext(collision.gameObject);
         }
         Debug.Log("ギミック作動");
 
@@ -91,4 +73,8 @@ public class GimmickController : MonoBehaviour
         }
     }
 
+    bool InvertBool(bool value)
+    {
+        return !value;
+    }
 }
