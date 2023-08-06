@@ -7,8 +7,6 @@ namespace Merusenne.Player
     public sealed class PlayerMove : MonoBehaviour
     {
         private Rigidbody2D _rbody;                         
-        float _axisH = 0.0f;                                //体の向き
-        //bool _playerxDir = true;                            
 
         [SerializeField] private float speed = 3.0f;        //速さ
         [SerializeField] private float _jump = 9.0f;        //ジャンプ力
@@ -16,57 +14,43 @@ namespace Merusenne.Player
 
         private bool _goJump = false;                       //ジャンプフラグ
         private bool _onGround = false;                     //接地フラグ
-
-        //アニメーション
-        private Animator animator;
-        private string _stopAnime = "PlayerStop";
-        private string _moveAnime = "PlayerMove";
-        private string _jumpAnime = "PlayerJump";
-        private string _deadAnime = "PlayerOver";
-        private string _nowAnime = "";
-        private string _oldAnime = "";
-
-        private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);
         
+
+        private ReactiveProperty<float> _axisH = new ReactiveProperty<float>();         //体の向き
+        private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);
+        private ReactiveProperty<bool> _isGrounded = new BoolReactiveProperty();
+
+        public IReactiveProperty<float> OnAxisH => _axisH;
         public IObservable<bool> Observable
         {
             get { return _playerxDir; }
         }
-        
+        public IReactiveProperty<bool> IsGrounded => _isGrounded;
 
         private void Awake()
         {
+            _axisH.AddTo(this);
+            _isGrounded.AddTo(this);
+
             _rbody = GetComponent<Rigidbody2D>();
-            animator = GetComponent<Animator>();
             
 
-        }
-
-        private void Start()
-        {
-            _nowAnime = _stopAnime;
-            _oldAnime = _stopAnime;
         }
 
         void Update()
         {
             
-            _axisH = Input.GetAxisRaw("Horizontal");         //水平方向の入力をチェックする
+            _axisH.Value = Input.GetAxisRaw("Horizontal");         //水平方向の入力をチェックする
 
             //向きの調整
-            if(_axisH > 0.0f)
+            if (_axisH.Value > 0.0f)
             {
-                transform.localScale = new Vector2(1, 1);
                 _playerxDir.Value = true;
             }
-            else if(_axisH < 0.0f)
+            else if (_axisH.Value < 0.0f)
             {
-                transform.localScale = new Vector2(-1, 1);
                 _playerxDir.Value = false;
             }
-
-            
-            
 
             //ジャンプ
             if (Input.GetButtonDown("Jump"))
@@ -78,16 +62,16 @@ namespace Merusenne.Player
         private void FixedUpdate()
         {
             //地上判定
-            _onGround = Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer);
+            ChecKGround();
 
             //速度の更新
-            if(_onGround || _axisH != 0)
+            if(IsGrounded.Value || _axisH.Value != 0)
             {
-                _rbody.velocity = new Vector2(speed * _axisH, _rbody.velocity.y);
+                _rbody.velocity = new Vector2(speed * _axisH.Value, _rbody.velocity.y);
             }
 
             //ジャンプ処理
-            if(_onGround && _goJump)    //地面の上andジャンプキー
+            if(IsGrounded.Value && _goJump)    //地面の上andジャンプキー
             {
                 Debug.Log("ジャンプ");
                 Vector2 jumpPw = new Vector2(0, _jump);
@@ -95,29 +79,7 @@ namespace Merusenne.Player
 
                 _goJump = false;                                //ジャンプフラグを下ろす
             }
-
-            if (_onGround)
-            {
-                if (_axisH == 0)
-                {
-                    _nowAnime = _stopAnime;
-                }
-                else
-                {
-                    _nowAnime = _moveAnime;
-                }
-            }
-            else
-            {
-                //空中
-                _nowAnime = _jumpAnime;
-            }
-
-            if(_nowAnime != _oldAnime)
-            {
-                _oldAnime = _nowAnime;
-                animator.Play(_nowAnime);
-            }
+            
         }
 
         void Jump()
@@ -126,17 +88,15 @@ namespace Merusenne.Player
             Debug.Log("ジャンプボタン押し");
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            if(collision.gameObject.tag == "Dead")
-            {
-                GameOver();
-            }
-        }
+        
 
-        private void GameOver()
+       
+
+        private void ChecKGround()
         {
-            animator.Play(_deadAnime);
+            _onGround = Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer);
+
+            IsGrounded.Value = _onGround;
         }
     }
 

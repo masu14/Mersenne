@@ -12,17 +12,23 @@ public class ShotController : MonoBehaviour
     [SerializeField] private float shotTime = 1.0f;     //解除コードの消滅までの時間
     private PlayerMove _playerMove;
 
-    private bool _shotxDir;
+    private bool _shotxDir = false;
 
 
 
-    private void Start()
+    private void Awake()
     {
         player = GameObject.FindWithTag("Player");                      //プレイヤーオブジェクト取得
-        _playerMove = player.GetComponent<PlayerMove>();     //プレイヤーコントローラー取得
+        if(player != null)
+        
+        _playerMove = player.GetComponent<PlayerMove>();                //プレイヤーコントローラー取得
+        
     }
+   
     private void Update()
     {
+        
+
         _playerMove.Observable.Subscribe(xDir => _shotxDir = xDir);
         if (_shotxDir == true)                        //スプライトが右向きのとき
         {
@@ -30,7 +36,8 @@ public class ShotController : MonoBehaviour
         }
         else                                                            //スプライトが左向きのとき
         {
-            ShotMove(-shotSpeed);  
+            ShotMove(-shotSpeed);
+            Debug.Log("左向きショット");
         }
     }
 

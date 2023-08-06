@@ -33,7 +33,16 @@ public class PlayerShot : MonoBehaviour
     
     void Update()
     {
-        _playerMove.Observable.Subscribe(xDir => _shotxDir=xDir);
+        if (_playerMove.OnAxisH.Value > 0.0f)
+        {
+            _shotxDir = true;
+        }
+        else if(_playerMove.OnAxisH.Value < 0.0f)
+        {
+            _shotxDir = false;
+            
+        }
+        
 
         //ショット切り替え　blue=0, green=1, red=2
         if (Input.GetKeyDown(KeyCode.UpArrow))
