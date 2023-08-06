@@ -5,8 +5,8 @@ using UnityEngine;
 public class PlayerAnimation : MonoBehaviour
 {
     private Animator _animator;
-    private Rigidbody2D _rbody;
     private PlayerMove _playerMove;
+    private PlayerCore _playerCore;
 
     private string _stopAnime = "PlayerStop";
     private string _moveAnime = "PlayerMove";
@@ -19,10 +19,10 @@ public class PlayerAnimation : MonoBehaviour
     {
 
         _animator = GetComponent<Animator>();
-        _rbody = GetComponent<Rigidbody2D>();
         _playerMove = GetComponent<PlayerMove>();
+        _playerCore = GetComponent<PlayerCore>();
 
-
+        _playerCore.OnDead.Subscribe(_ => Dead()).AddTo(this);
     }
 
     private void Start()
@@ -66,15 +66,9 @@ public class PlayerAnimation : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Dead")
-        {
-            GameOver();
-        }
-    }
+    
 
-    private void GameOver()
+    private void Dead()
     {
         _animator.Play(_deadAnime);
     }

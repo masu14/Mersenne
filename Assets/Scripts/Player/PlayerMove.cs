@@ -6,7 +6,8 @@ namespace Merusenne.Player
 {
     public sealed class PlayerMove : MonoBehaviour
     {
-        private Rigidbody2D _rbody;                         
+        private Rigidbody2D _rbody;
+        private PlayerCore _playerCore;
 
         [SerializeField] private float speed = 3.0f;        //速さ
         [SerializeField] private float _jump = 9.0f;        //ジャンプ力
@@ -17,8 +18,8 @@ namespace Merusenne.Player
         
 
         private ReactiveProperty<float> _axisH = new ReactiveProperty<float>();         //体の向き
-        private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);
-        private ReactiveProperty<bool> _isGrounded = new BoolReactiveProperty();
+        private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);  //体の向き,ショットPrefabに送信
+        private ReactiveProperty<bool> _isGrounded = new BoolReactiveProperty();        //接地判定,
 
         public IReactiveProperty<float> OnAxisH => _axisH;
         public IObservable<bool> Observable
@@ -33,8 +34,9 @@ namespace Merusenne.Player
             _isGrounded.AddTo(this);
 
             _rbody = GetComponent<Rigidbody2D>();
-            
+            _playerCore = GetComponent<PlayerCore>();
 
+            _playerCore.OnDead.Subscribe(_ => DeadMove()).AddTo(this);
         }
 
         void Update()
@@ -88,15 +90,17 @@ namespace Merusenne.Player
             Debug.Log("ジャンプボタン押し");
         }
 
-        
-
-       
-
         private void ChecKGround()
         {
             _onGround = Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer);
 
             IsGrounded.Value = _onGround;
+        }
+
+        private void DeadMove()
+        {
+            GetComponent<CapsuleCollider2D>().enabled = false;
+            _rbody.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
         }
     }
 

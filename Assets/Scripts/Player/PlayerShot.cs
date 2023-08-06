@@ -7,7 +7,6 @@ using Merusenne.Player;
 
 public class PlayerShot : MonoBehaviour
 {
-    Rigidbody2D _rbody;
     private bool _goShot = false;
     private bool _shotxDir = false;
     [SerializeField] private float _goShotTime = 1.5f;
@@ -23,8 +22,6 @@ public class PlayerShot : MonoBehaviour
 
     void Start()
     {
-
-        _rbody = GetComponent<Rigidbody2D>();
         _shotxDir = true;
         _shotPoint = transform.Find("ShotPoint").localPosition;
         _goShot = true;

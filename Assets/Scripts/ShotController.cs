@@ -6,7 +6,7 @@ using UniRx;
 
 public class ShotController : MonoBehaviour
 {
-    private GameObject player;
+    private GameObject _player;
 
     [SerializeField] private float shotSpeed = 0.02f;   //解除コードの速さ
     [SerializeField] private float shotTime = 1.0f;     //解除コードの消滅までの時間
@@ -18,10 +18,9 @@ public class ShotController : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.FindWithTag("Player");                      //プレイヤーオブジェクト取得
-        if(player != null)
+        _player = GameObject.FindWithTag("Player");                      //プレイヤーオブジェクト取得
         
-        _playerMove = player.GetComponent<PlayerMove>();                //プレイヤーコントローラー取得
+        _playerMove = _player.GetComponent<PlayerMove>();                //プレイヤーコントローラー取得
         
     }
    
