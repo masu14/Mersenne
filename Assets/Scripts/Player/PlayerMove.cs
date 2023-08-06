@@ -17,7 +17,17 @@ namespace Merusenne.Player
         private bool _goJump = false;                       //ジャンプフラグ
         private bool _onGround = false;                     //接地フラグ
 
+        //アニメーション
+        private Animator animator;
+        private string _stopAnime = "PlayerStop";
+        private string _moveAnime = "PlayerMove";
+        private string _jumpAnime = "PlayerJump";
+        private string _deadAnime = "PlayerOver";
+        private string _nowAnime = "";
+        private string _oldAnime = "";
+
         private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);
+        
         public IObservable<bool> Observable
         {
             get { return _playerxDir; }
@@ -27,9 +37,17 @@ namespace Merusenne.Player
         private void Awake()
         {
             _rbody = GetComponent<Rigidbody2D>();
+            animator = GetComponent<Animator>();
             
+
         }
-        
+
+        private void Start()
+        {
+            _nowAnime = _stopAnime;
+            _oldAnime = _stopAnime;
+        }
+
         void Update()
         {
             
@@ -46,6 +64,9 @@ namespace Merusenne.Player
                 transform.localScale = new Vector2(-1, 1);
                 _playerxDir.Value = false;
             }
+
+            
+            
 
             //ジャンプ
             if (Input.GetButtonDown("Jump"))
@@ -74,12 +95,48 @@ namespace Merusenne.Player
 
                 _goJump = false;                                //ジャンプフラグを下ろす
             }
+
+            if (_onGround)
+            {
+                if (_axisH == 0)
+                {
+                    _nowAnime = _stopAnime;
+                }
+                else
+                {
+                    _nowAnime = _moveAnime;
+                }
+            }
+            else
+            {
+                //空中
+                _nowAnime = _jumpAnime;
+            }
+
+            if(_nowAnime != _oldAnime)
+            {
+                _oldAnime = _nowAnime;
+                animator.Play(_nowAnime);
+            }
         }
 
         void Jump()
         {
             _goJump = true;
             Debug.Log("ジャンプボタン押し");
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if(collision.gameObject.tag == "Dead")
+            {
+                GameOver();
+            }
+        }
+
+        private void GameOver()
+        {
+            animator.Play(_deadAnime);
         }
     }
 

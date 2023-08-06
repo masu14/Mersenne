@@ -12,6 +12,7 @@ TagManager:
   - Barrier_green
   - Barrier_red
   - Stage
+  - Dead
   layers:
   - Default
   - TransparentFX
