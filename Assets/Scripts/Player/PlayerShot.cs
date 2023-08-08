@@ -42,12 +42,21 @@ public class PlayerShot : MonoBehaviour
         
 
         //ショット切り替え　blue=0, green=1, red=2
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             _shotSwitch++;
             if (_shotSwitch > 2)
             {
                 _shotSwitch = 0;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            _shotSwitch--;
+            if (_shotSwitch < 0)
+            {
+                _shotSwitch = 2;
             }
         }
 

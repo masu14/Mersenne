@@ -9,12 +9,15 @@ namespace Merusenne.Player
         private Rigidbody2D _rbody;
         private PlayerCore _playerCore;
 
-        [SerializeField] private float speed = 3.0f;        //速さ
+        [SerializeField] private float _speed = 3.0f;        //速さ
         [SerializeField] private float _jump = 9.0f;        //ジャンプ力
+        [SerializeField] private float _deadJump = 10f;
+        [SerializeField] private float _deadGravity = 30f;
         [SerializeField] private LayerMask _groundLayer;    //地面レイヤー指定
 
         private bool _goJump = false;                       //ジャンプフラグ
         private bool _onGround = false;                     //接地フラグ
+        private bool _isDead = false;
         
 
         private ReactiveProperty<float> _axisH = new ReactiveProperty<float>();         //体の向き
@@ -45,11 +48,11 @@ namespace Merusenne.Player
             _axisH.Value = Input.GetAxisRaw("Horizontal");         //水平方向の入力をチェックする
 
             //向きの調整
-            if (_axisH.Value > 0.0f)
+            if (_axisH.Value > 0.15f)
             {
                 _playerxDir.Value = true;
             }
-            else if (_axisH.Value < 0.0f)
+            else if (_axisH.Value < -0.15f)
             {
                 _playerxDir.Value = false;
             }
@@ -69,7 +72,7 @@ namespace Merusenne.Player
             //速度の更新
             if(IsGrounded.Value || _axisH.Value != 0)
             {
-                _rbody.velocity = new Vector2(speed * _axisH.Value, _rbody.velocity.y);
+                _rbody.velocity = new Vector2(_speed * _axisH.Value, _rbody.velocity.y);
             }
 
             //ジャンプ処理
@@ -81,15 +84,22 @@ namespace Merusenne.Player
 
                 _goJump = false;                                //ジャンプフラグを下ろす
             }
-            
+
+            if (_isDead)
+            {
+                transform.localPosition += new Vector3(0, _deadJump) * Time.deltaTime;
+                _deadJump -= _deadGravity * Time.deltaTime;
+            }
         }
 
+        //ジャンプフラグを立てる
         void Jump()
         {
             _goJump = true;
             Debug.Log("ジャンプボタン押し");
         }
 
+        //地上判定
         private void ChecKGround()
         {
             _onGround = Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer);
@@ -97,10 +107,11 @@ namespace Merusenne.Player
             IsGrounded.Value = _onGround;
         }
 
+        //Dead時に跳ね上がる動き
         private void DeadMove()
         {
             GetComponent<CapsuleCollider2D>().enabled = false;
-            _rbody.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
+            _isDead = true;
         }
     }
 
