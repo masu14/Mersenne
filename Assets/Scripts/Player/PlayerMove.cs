@@ -17,7 +17,7 @@ namespace Merusenne.Player
         [SerializeField] private float _deadGravity = 30f;  //dead時演出の落下
         [SerializeField] private LayerMask _groundLayer;    //地面レイヤー指定
 
-        
+        private bool _isJump = false;
         private bool _onGround = false;                     //接地フラグ
         private bool _isDead = false;
         
@@ -55,6 +55,11 @@ namespace Merusenne.Player
             {
                 _playerxDir.Value = false;
             }
+
+            if (_inputEventProvider.IsJump.Value)
+            {
+                _isJump = true;
+            }
         }
 
         private void FixedUpdate()
@@ -69,12 +74,12 @@ namespace Merusenne.Player
             }
 
             //ジャンプ処理
-            if(IsGrounded.Value && _inputEventProvider.IsJump.Value)    //地面の上andジャンプキー
+            if(IsGrounded.Value && _isJump)    //地面の上andジャンプキー
             {
                 Debug.Log("ジャンプ");
                 Vector2 jumpPw = new Vector2(0, _jump);
                 _rbody.AddForce(jumpPw, ForceMode2D.Impulse);   //上向きに瞬間的な力
-
+                _isJump = false;
                 
             }
 

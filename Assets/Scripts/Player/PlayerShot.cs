@@ -66,7 +66,7 @@ namespace Merusenne.Player
             }
 
             //ƒVƒ‡ƒbƒg”­ŽË
-            if (Input.GetButtonDown("Fire1") && _goShot == true)
+            if (_inputEventProvider.IsShot.Value && _goShot == true)
             {
                 Shot();
                 _goShot = false;
