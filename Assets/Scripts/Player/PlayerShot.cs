@@ -1,116 +1,122 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UniRx;
-using Merusenne.Player;
 
-public class PlayerShot : MonoBehaviour
+
+namespace Merusenne.Player
 {
-    private bool _goShot = false;
-    private bool _shotxDir = false;
-    [SerializeField] private float _goShotTime = 1.5f;
-    [SerializeField] private ShotController _shotBluePrefab;
-    [SerializeField] private ShotController _shotGreenPrefab;
-    [SerializeField] private ShotController _shotRedPrefab;
-
-    private Vector3 _shotPoint;
-    private ReactiveProperty<int> _shotSwitch = new ReactiveProperty<int>(0);
-    public IReactiveProperty<int> OnShotSwitch => _shotSwitch;
-
-    [SerializeField] private PlayerMove _playerMove;
-    
-    void Start()
+    public class PlayerShot : MonoBehaviour
     {
-        _shotxDir = true;
-        _shotPoint = transform.Find("ShotPoint").localPosition;
-        _goShot = true;
-        _shotSwitch.AddTo(this);
-    }
+        private bool _goShot = false;
+        private bool _shotxDir = false;
+        [SerializeField] private float _goShotTime = 1.5f;
+        [SerializeField] private ShotController _shotBluePrefab;
+        [SerializeField] private ShotController _shotGreenPrefab;
+        [SerializeField] private ShotController _shotRedPrefab;
 
-    
-    void Update()
-    {
-        if (_playerMove.OnAxisH.Value > 0.0f)
+        private IInputEventProvider _inputEventProvider;
+
+        private Vector3 _shotPoint;
+        private ReactiveProperty<int> _shotSwitch = new ReactiveProperty<int>(0);
+        public IReactiveProperty<int> OnShotSwitch => _shotSwitch;
+
+        [SerializeField] private PlayerMove _playerMove;
+
+        void Start()
         {
+            _inputEventProvider = GetComponent<IInputEventProvider>();
+
             _shotxDir = true;
+            _shotPoint = transform.Find("ShotPoint").localPosition;
+            _goShot = true;
+            _shotSwitch.AddTo(this);
         }
-        else if(_playerMove.OnAxisH.Value < 0.0f)
-        {
-            _shotxDir = false;
-            
-        }
-        
 
-        //ショット切り替え　blue=0, green=1, red=2
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+
+        void Update()
         {
-            _shotSwitch.Value++;
-            if (_shotSwitch.Value > 2)
+            if (_playerMove.OnAxisH.Value > 0.0f)
             {
-                _shotSwitch.Value = 0;
+                _shotxDir = true;
             }
-        }
-
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            _shotSwitch.Value--;
-            if (_shotSwitch.Value < 0)
+            else if (_playerMove.OnAxisH.Value < 0.0f)
             {
-                _shotSwitch.Value = 2;
+                _shotxDir = false;
+
             }
-        }
 
-        //ショット発射
-        if(Input.GetButtonDown("Fire1") && _goShot == true)
-        {
-            Shot();
-            _goShot = false;
-            Observable.Timer(TimeSpan.FromSeconds(_goShotTime)).Subscribe(_ => GoShot());
-        }
-    }
 
-    void Shot()
-    {
-        if(_shotSwitch.Value == 0)
-        {
-            if (_shotxDir)
+            //ショット切り替え　blue=0, green=1, red=2
+            if (_inputEventProvider.IsDownSwitch.Value)
             {
-                Instantiate(_shotBluePrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
+                _shotSwitch.Value++;
+                if (_shotSwitch.Value > 2)
+                {
+                    _shotSwitch.Value = 0;
+                }
             }
-            else
+
+            if (_inputEventProvider.IsUpSwitch.Value)
             {
-                Instantiate(_shotBluePrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
+                _shotSwitch.Value--;
+                if (_shotSwitch.Value < 0)
+                {
+                    _shotSwitch.Value = 2;
+                }
+            }
+
+            //ショット発射
+            if (Input.GetButtonDown("Fire1") && _goShot == true)
+            {
+                Shot();
+                _goShot = false;
+                Observable.Timer(TimeSpan.FromSeconds(_goShotTime)).Subscribe(_ => GoShot());
             }
         }
 
-        if (_shotSwitch.Value == 1)
+        void Shot()
         {
-            if (_shotxDir)
+            if (_shotSwitch.Value == 0)
             {
-                Instantiate(_shotGreenPrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
+                if (_shotxDir)
+                {
+                    Instantiate(_shotBluePrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
+                }
+                else
+                {
+                    Instantiate(_shotBluePrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
+                }
             }
-            else
+
+            if (_shotSwitch.Value == 1)
             {
-                Instantiate(_shotGreenPrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
+                if (_shotxDir)
+                {
+                    Instantiate(_shotGreenPrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
+                }
+                else
+                {
+                    Instantiate(_shotGreenPrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
+                }
+            }
+
+            if (_shotSwitch.Value == 2)
+            {
+                if (_shotxDir)
+                {
+                    Instantiate(_shotRedPrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
+                }
+                else
+                {
+                    Instantiate(_shotRedPrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
+                }
             }
         }
 
-        if (_shotSwitch.Value == 2)
+        void GoShot()
         {
-            if (_shotxDir)
-            {
-                Instantiate(_shotRedPrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
-            }
-            else
-            {
-                Instantiate(_shotRedPrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
-            }
+            _goShot = true;
         }
-    }
-
-    void GoShot()
-    {
-        _goShot = true;
     }
 }
+

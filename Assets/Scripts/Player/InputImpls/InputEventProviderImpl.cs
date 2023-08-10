@@ -8,9 +8,13 @@ namespace Merusenne.Player.InputImpls
     {
         private readonly Subject<float> _horizontalSubject = new Subject<float>();
         private readonly ReactiveProperty<bool> _jump = new ReactiveProperty<bool>(false);
+        private readonly ReactiveProperty<bool> _upSwitch = new ReactiveProperty<bool>(false);
+        private readonly ReactiveProperty<bool> _downSwitch = new ReactiveProperty<bool>(false);
 
         public IObservable<float> HorizontalObservable => _horizontalSubject;
         public IReadOnlyReactiveProperty<bool> IsJump => _jump;
+        public IReadOnlyReactiveProperty<bool> IsUpSwitch => _upSwitch;
+        public IReadOnlyReactiveProperty<bool> IsDownSwitch => _downSwitch;
         void Start()
         {
             _jump.AddTo(this);
@@ -20,10 +24,15 @@ namespace Merusenne.Player.InputImpls
             {
                 _horizontalSubject.OnNext(horizontalInput);
             }
+
+            _upSwitch.AddTo(this);
+            _downSwitch.AddTo(this);
         }
         private void Update()
         {
             _jump.Value = Input.GetButton("Jump");
+            _upSwitch.Value = Input.GetKeyDown(KeyCode.UpArrow);
+            _downSwitch.Value = Input.GetKeyDown(KeyCode.DownArrow);
         }
 
     }

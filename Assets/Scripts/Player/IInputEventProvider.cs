@@ -10,5 +10,7 @@ namespace Merusenne.Player
         IObservable<float> HorizontalObservable { get; }    //…•½•ûŒü‚Ì“ü—Í
 
         IReadOnlyReactiveProperty<bool> IsJump { get; }
+        IReadOnlyReactiveProperty<bool> IsUpSwitch { get; }
+        IReadOnlyReactiveProperty<bool> IsDownSwitch { get; }
     }
 }

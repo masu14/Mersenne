@@ -1,6 +1,7 @@
 using UnityEngine;
 using UniRx;
 using UnityEngine.UI;
+using Merusenne.Player;
 
 public class ShotUICotroller : MonoBehaviour
 {
