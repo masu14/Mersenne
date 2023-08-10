@@ -1,75 +1,80 @@
-using Merusenne.Player;
 using UniRx;
 using UnityEngine;
 
-public class PlayerAnimation : MonoBehaviour
+namespace Merusenne.Player
 {
-    private Animator _animator;
-    private PlayerMove _playerMove;
-    private PlayerCore _playerCore;
-
-    private string _stopAnime = "PlayerStop";
-    private string _moveAnime = "PlayerMove";
-    private string _jumpAnime = "PlayerJump";
-    private string _deadAnime = "PlayerOver";
-    private string _nowAnime = "";
-    private string _oldAnime = "";
-
-    private void Awake()
+    public class PlayerAnimation : MonoBehaviour
     {
+        private Animator _animator;
+        private PlayerMove _playerMove;
+        private PlayerCore _playerCore;
+        private IInputEventProvider _inputEventProvider;
 
-        _animator = GetComponent<Animator>();
-        _playerMove = GetComponent<PlayerMove>();
-        _playerCore = GetComponent<PlayerCore>();
+        private string _stopAnime = "PlayerStop";
+        private string _moveAnime = "PlayerMove";
+        private string _jumpAnime = "PlayerJump";
+        private string _deadAnime = "PlayerOver";
+        private string _nowAnime = "";
+        private string _oldAnime = "";
 
-        _playerCore.OnDead.Subscribe(_ => Dead()).AddTo(this);
-    }
-
-    private void Start()
-    {
-        _nowAnime = _stopAnime;
-        _oldAnime = _stopAnime;
-    }
-    void Update()
-    {
-        //Œü‚«‚Ì’²®
-        if (_playerMove.OnAxisH.Value > 0.0f)
+        private void Awake()
         {
-            transform.localScale = new Vector2(1, 1);
-        }
-        else if (_playerMove.OnAxisH.Value < 0.0f)
-        {
-            transform.localScale = new Vector2(-1, 1);
+
+            _animator = GetComponent<Animator>();
+            _playerMove = GetComponent<PlayerMove>();
+            _playerCore = GetComponent<PlayerCore>();
+            _inputEventProvider = GetComponent<IInputEventProvider>();
+
+            _playerCore.OnDead.Subscribe(_ => Dead()).AddTo(this);
         }
 
-        if (_playerMove.IsGrounded.Value)
+        private void Start()
         {
-            if (_playerMove.OnAxisH.Value == 0)
+            _nowAnime = _stopAnime;
+            _oldAnime = _stopAnime;
+        }
+        void Update()
+        {
+            //Œü‚«‚Ì’²®
+            if (_inputEventProvider.AxisH.Value > 0.0f)
             {
-                _nowAnime = _stopAnime;
+                transform.localScale = new Vector2(1, 1);
+            }
+            else if (_inputEventProvider.AxisH.Value < 0.0f)
+            {
+                transform.localScale = new Vector2(-1, 1);
+            }
+
+            if (_playerMove.IsGrounded.Value)
+            {
+                if (_inputEventProvider.AxisH.Value == 0)
+                {
+                    _nowAnime = _stopAnime;
+                }
+                else
+                {
+                    _nowAnime = _moveAnime;
+                }
             }
             else
             {
-                _nowAnime = _moveAnime;
+                //‹ó’†
+                _nowAnime = _jumpAnime;
+            }
+
+            if (_nowAnime != _oldAnime)
+            {
+                _oldAnime = _nowAnime;
+                _animator.Play(_nowAnime);
             }
         }
-        else
-        {
-            //‹ó’†
-            _nowAnime = _jumpAnime;
-        }
 
-        if (_nowAnime != _oldAnime)
+
+
+        private void Dead()
         {
-            _oldAnime = _nowAnime;
-            _animator.Play(_nowAnime);
+            _animator.Play(_deadAnime);
         }
     }
 
-    
-
-    private void Dead()
-    {
-        _animator.Play(_deadAnime);
-    }
 }

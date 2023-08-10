@@ -35,11 +35,11 @@ namespace Merusenne.Player
 
         void Update()
         {
-            if (_playerMove.OnAxisH.Value > 0.0f)
+            if (_inputEventProvider.AxisH.Value > 0.0f)
             {
                 _shotxDir = true;
             }
-            else if (_playerMove.OnAxisH.Value < 0.0f)
+            else if (_inputEventProvider.AxisH.Value < 0.0f)
             {
                 _shotxDir = false;
 

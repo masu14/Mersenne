@@ -22,11 +22,10 @@ namespace Merusenne.Player
         private bool _isDead = false;
         
 
-        private ReactiveProperty<float> _axisH = new ReactiveProperty<float>();         //体の向き
+        
         private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);  //体の向き,ショットPrefabに送信
         private ReactiveProperty<bool> _isGrounded = new BoolReactiveProperty();        //接地判定,
 
-        public IReactiveProperty<float> OnAxisH => _axisH;
         public IObservable<bool> Observable
         {
             get { return _playerxDir; }
@@ -35,7 +34,7 @@ namespace Merusenne.Player
 
         private void Awake()
         {
-            _axisH.AddTo(this);
+            
             _isGrounded.AddTo(this);
 
             _rbody = GetComponent<Rigidbody2D>();
@@ -47,19 +46,15 @@ namespace Merusenne.Player
 
         void Update()
         {
-            
-            _axisH.Value = Input.GetAxisRaw("Horizontal");         //水平方向の入力をチェックする
-
             //向きの調整
-            if (_axisH.Value > 0.15f)
+            if (_inputEventProvider.AxisH.Value > 0.15f)
             {
                 _playerxDir.Value = true;
             }
-            else if (_axisH.Value < -0.15f)
+            else if (_inputEventProvider.AxisH.Value < -0.15f)
             {
                 _playerxDir.Value = false;
             }
-            
         }
 
         private void FixedUpdate()
@@ -68,9 +63,9 @@ namespace Merusenne.Player
             ChecKGround();
 
             //速度の更新
-            if(IsGrounded.Value || _axisH.Value != 0)
+            if(IsGrounded.Value || _inputEventProvider.AxisH.Value != 0)
             {
-                _rbody.velocity = new Vector2(_speed * _axisH.Value, _rbody.velocity.y);
+                _rbody.velocity = new Vector2(_speed * _inputEventProvider.AxisH.Value, _rbody.velocity.y);
             }
 
             //ジャンプ処理
