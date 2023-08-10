@@ -2,7 +2,7 @@ using System;
 using UniRx;
 using UnityEngine;
 
-namespace InputEvent
+namespace Merusenne.Player
 {
     public interface IInputEventProvider
     {

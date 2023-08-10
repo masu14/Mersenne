@@ -2,20 +2,22 @@ using System;
 using UnityEngine;
 using UniRx;
 
+
 namespace Merusenne.Player
 {
     public sealed class PlayerMove : MonoBehaviour
     {
         private Rigidbody2D _rbody;
         private PlayerCore _playerCore;
+        private IInputEventProvider _inputEventProvider;
 
         [SerializeField] private float _speed = 3.0f;        //速さ
         [SerializeField] private float _jump = 9.0f;        //ジャンプ力
-        [SerializeField] private float _deadJump = 10f;
-        [SerializeField] private float _deadGravity = 30f;
+        [SerializeField] private float _deadJump = 10f;     //dead時演出のジャンプ
+        [SerializeField] private float _deadGravity = 30f;  //dead時演出の落下
         [SerializeField] private LayerMask _groundLayer;    //地面レイヤー指定
 
-        private bool _goJump = false;                       //ジャンプフラグ
+        
         private bool _onGround = false;                     //接地フラグ
         private bool _isDead = false;
         
@@ -38,6 +40,7 @@ namespace Merusenne.Player
 
             _rbody = GetComponent<Rigidbody2D>();
             _playerCore = GetComponent<PlayerCore>();
+            _inputEventProvider = GetComponent<IInputEventProvider>();
 
             _playerCore.OnDead.Subscribe(_ => DeadMove()).AddTo(this);
         }
@@ -56,12 +59,7 @@ namespace Merusenne.Player
             {
                 _playerxDir.Value = false;
             }
-
-            //ジャンプ
-            if (Input.GetButtonDown("Jump"))
-            {
-                Jump();
-            }
+            
         }
 
         private void FixedUpdate()
@@ -76,13 +74,13 @@ namespace Merusenne.Player
             }
 
             //ジャンプ処理
-            if(IsGrounded.Value && _goJump)    //地面の上andジャンプキー
+            if(IsGrounded.Value && _inputEventProvider.IsJump.Value)    //地面の上andジャンプキー
             {
                 Debug.Log("ジャンプ");
                 Vector2 jumpPw = new Vector2(0, _jump);
                 _rbody.AddForce(jumpPw, ForceMode2D.Impulse);   //上向きに瞬間的な力
 
-                _goJump = false;                                //ジャンプフラグを下ろす
+                
             }
 
             if (_isDead)
@@ -92,12 +90,7 @@ namespace Merusenne.Player
             }
         }
 
-        //ジャンプフラグを立てる
-        void Jump()
-        {
-            _goJump = true;
-            Debug.Log("ジャンプボタン押し");
-        }
+        
 
         //地上判定
         private void ChecKGround()
