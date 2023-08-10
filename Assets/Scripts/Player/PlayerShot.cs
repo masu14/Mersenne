@@ -10,21 +10,22 @@ public class PlayerShot : MonoBehaviour
     private bool _goShot = false;
     private bool _shotxDir = false;
     [SerializeField] private float _goShotTime = 1.5f;
-
     [SerializeField] private ShotController _shotBluePrefab;
     [SerializeField] private ShotController _shotGreenPrefab;
     [SerializeField] private ShotController _shotRedPrefab;
 
     private Vector3 _shotPoint;
-    private int _shotSwitch = 0;
+    private ReactiveProperty<int> _shotSwitch = new ReactiveProperty<int>(0);
+    public IReactiveProperty<int> OnShotSwitch => _shotSwitch;
 
     [SerializeField] private PlayerMove _playerMove;
-
+    
     void Start()
     {
         _shotxDir = true;
         _shotPoint = transform.Find("ShotPoint").localPosition;
         _goShot = true;
+        _shotSwitch.AddTo(this);
     }
 
     
@@ -44,19 +45,19 @@ public class PlayerShot : MonoBehaviour
         //ショット切り替え　blue=0, green=1, red=2
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            _shotSwitch++;
-            if (_shotSwitch > 2)
+            _shotSwitch.Value++;
+            if (_shotSwitch.Value > 2)
             {
-                _shotSwitch = 0;
+                _shotSwitch.Value = 0;
             }
         }
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            _shotSwitch--;
-            if (_shotSwitch < 0)
+            _shotSwitch.Value--;
+            if (_shotSwitch.Value < 0)
             {
-                _shotSwitch = 2;
+                _shotSwitch.Value = 2;
             }
         }
 
@@ -71,7 +72,7 @@ public class PlayerShot : MonoBehaviour
 
     void Shot()
     {
-        if(_shotSwitch == 0)
+        if(_shotSwitch.Value == 0)
         {
             if (_shotxDir)
             {
@@ -83,7 +84,7 @@ public class PlayerShot : MonoBehaviour
             }
         }
 
-        if (_shotSwitch == 1)
+        if (_shotSwitch.Value == 1)
         {
             if (_shotxDir)
             {
@@ -95,7 +96,7 @@ public class PlayerShot : MonoBehaviour
             }
         }
 
-        if (_shotSwitch == 2)
+        if (_shotSwitch.Value == 2)
         {
             if (_shotxDir)
             {

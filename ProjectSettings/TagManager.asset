@@ -13,6 +13,9 @@ TagManager:
   - Barrier_red
   - Stage
   - Dead
+  - Blue_shot_UI
+  - Green_shot_UI
+  - Red_shot_UI
   layers:
   - Default
   - TransparentFX
