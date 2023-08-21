@@ -43,7 +43,11 @@ public class BarrierController : MonoBehaviour
         }
     }
 
-    
+    private void OnDestroy()
+    {
+        grandGimmick.OnCollisionObj.Subscribe(SwitchBarrierLight).Dispose();
+    }
+
     private void SwitchBarrierLight(GameObject gameObject)
     {
         //ê¬BarrierÇÃî≠åıÅAè¡ñ≈
@@ -108,6 +112,8 @@ public class BarrierController : MonoBehaviour
             }
 
         }
-    }   
+    }
+    
+
     
 }

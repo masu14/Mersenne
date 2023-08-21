@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8487181669137715877}
   - component: {fileID: 8487181669137715876}
   - component: {fileID: 8487181669137715875}
-  - component: {fileID: 8487181669137715874}
   - component: {fileID: 8487181669137715878}
+  - component: {fileID: 7454035739189482191}
   m_Layer: 7
   m_Name: ThroughFloor
   m_TagString: Untagged
@@ -113,7 +113,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!251 &8487181669137715874
+--- !u!114 &8487181669137715878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8487181669137715873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b5df3a2d5158149a7fa61b32d7023d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!251 &7454035739189482191
 PlatformEffector2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,15 +144,3 @@ PlatformEffector2D:
   m_UseSideFriction: 0
   m_UseSideBounce: 0
   m_SideArc: 1
---- !u!114 &8487181669137715878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8487181669137715873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07b5df3a2d5158149a7fa61b32d7023d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

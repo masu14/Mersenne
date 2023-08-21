@@ -16,6 +16,8 @@ TagManager:
   - Blue_shot_UI
   - Green_shot_UI
   - Red_shot_UI
+  - SaveDataManager
+  - SavePoint
   layers:
   - Default
   - TransparentFX

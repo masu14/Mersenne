@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ThroughFloorController : MonoBehaviour
@@ -11,14 +9,14 @@ public class ThroughFloorController : MonoBehaviour
         platformEffector2D = GetComponent<PlatformEffector2D>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if (Input.GetKey(KeyCode.DownArrow))
         {
             platformEffector2D.rotationalOffset = 180f;
         }
-        else if (Input.GetButtonDown("Jump"))
+        else if (Input.GetButtonDown("Jump"))//InputEventProviderÇ≈èàóùÇ∑Ç◊Ç´Ç»ÇÃÇ≈å„ÇŸÇ«èCê≥
         {
             platformEffector2D.rotationalOffset = 0f;
         }
