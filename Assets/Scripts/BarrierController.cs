@@ -23,7 +23,7 @@ public class BarrierController : MonoBehaviour
 
         if (grandGimmick != null)
         {
-            Debug.Log("祖父オブジェクトの名前：" + grandGimmick.name);
+            //Debug.Log("祖父オブジェクトの名前：" + grandGimmick.name);
         }
         else
         {
@@ -43,10 +43,7 @@ public class BarrierController : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        grandGimmick.OnCollisionObj.Subscribe(SwitchBarrierLight).Dispose();
-    }
+    
 
     private void SwitchBarrierLight(GameObject gameObject)
     {

@@ -10,15 +10,13 @@ public class GameManager : MonoBehaviour
     private string sceneName = "StageScene";
     private GameObject _player;
     private PlayerCore _playerCore;
-    private GameObject _saveDataObj;
-    private SaveDataManager _saveData;
+    private SavePointController[] savePoints;
+
+    string _filePath;
+    SaveDataManager _save;
+    
     private Vector2 playerPos;
-
-    private const string _savePath = "save.json";
-    private Vector2 _playerStartPos = new Vector2(-5,0);
-
-    //private ReactiveProperty<Vector2> _playerPos = new ReactiveProperty<Vector2>();
-    //public IReadOnlyReactiveProperty<Vector2> PlayerPosition => _playerPos;
+    private Vector2 _playerStartPos = new Vector2(-5, 0);
 
     void Awake()
     {
@@ -27,34 +25,61 @@ public class GameManager : MonoBehaviour
         _playerCore = _player.GetComponent<PlayerCore>();
         _playerCore.OnDead.Subscribe(_=>WaitGameRestart()).AddTo(this);
 
-        //セーブデータ更新
-        _saveDataObj = GameObject.FindWithTag("SaveDataManager");
-        _saveData = _saveDataObj.GetComponent<SaveDataManager>();
-        _saveData.SavePosition.Subscribe(x => SaveGame(x)).AddTo(this);
 
+        _filePath = Application.dataPath + "/.savedata.json";
+        _save = new SaveDataManager();
+
+        //セーブポイントに触れたとき座標をセーブ
+        savePoints = FindObjectsOfType<SavePointController>();
+        foreach(var savePoint in savePoints)
+        {
+            savePoint.OnTriggerSave
+                .Where(x => x != Vector2.zero)
+                .Subscribe(x =>
+            {
+                _save._nowSavePos = x;
+                
+                Debug.Log($"セーブポイントの位置を変更しました:{x}");
+            }).AddTo(this);
+        }
         
+
     }
 
     private void Start()
     {
-        LoadGame();     //セーブデータのロード
-        _player.transform.position = playerPos;
+        Load();     //セーブデータのロード
+        _player.transform.position = _save._nowSavePos;
+        
     }
-
+    /*
     void SaveGame(Vector2 data)
     {
         string jsonData = JsonUtility.ToJson(data);
         File.WriteAllText(_savePath, jsonData);
+    }*/
+
+
+    public void Save()
+    {
+        
+        Debug.Log($"セーブ時のnowSavePos:{_save._nowSavePos}");
+        string json = JsonUtility.ToJson(_save);
+        StreamWriter streamWriter = new StreamWriter(_filePath);
+        streamWriter.Write(json); streamWriter.Flush();
+        streamWriter.Close();
     }
 
-    void LoadGame()
+    public void Load()
     {
-        if (File.Exists(_savePath))
+        if (File.Exists(_filePath))
         {
-            string jsonData = File.ReadAllText(_savePath);
-            SaveDataManager data = JsonUtility.FromJson<SaveDataManager>(jsonData);
-            playerPos = data._nowSavePos;
-            
+            StreamReader streamReader = new StreamReader(_filePath);
+            string data = streamReader.ReadToEnd();
+            streamReader.Close();
+            _save = JsonUtility.FromJson<SaveDataManager>(data);
+            //playerPos = _save._nowSavePos;
+            Debug.Log($"ロード時のnowSavePos:{_save._nowSavePos}");
         }
         else
         {
@@ -69,7 +94,7 @@ public class GameManager : MonoBehaviour
     }
     private void GameRestart()
     {
-        
+        Save();
         SceneManager.LoadScene(sceneName);
     }
 

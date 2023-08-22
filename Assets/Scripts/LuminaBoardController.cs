@@ -20,7 +20,7 @@ public class LuminaBoardController : MonoBehaviour
 
         if(grandGimmick != null)
         {
-            Debug.Log("祖父オブジェクトの名前：" + grandGimmick.name);
+            //Debug.Log("祖父オブジェクトの名前：" + grandGimmick.name);
         }
         else
         {

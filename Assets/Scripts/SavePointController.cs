@@ -10,9 +10,9 @@ public class SavePointController : MonoBehaviour
     [SerializeField] private int _savePointNum;
     private Vector2 _savePointPos;
 
-    //Subject‚ðIObservable‚Æ‚µ‚ÄŒöŠJ‚·‚é
-    private Subject<Vector2> _savePointSub = new Subject<Vector2>();
-    public IObservable<Vector2> OnTrigger => _savePointSub;
+
+    private ReactiveProperty<Vector2> _savePoint = new ReactiveProperty<Vector2>();
+    public IReadOnlyReactiveProperty<Vector2> OnTriggerSave => _savePoint;
     void Start()
     {
         _light2DObject = transform.GetChild(0).gameObject;
@@ -22,11 +22,12 @@ public class SavePointController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Player")    //Œã‚Åƒ^ƒO‚É•Ï‚¦‚é
+        if(collision.gameObject.tag == "Player")    
         {
             _saveLight.color = new Color32(252, 252, 252, 252);
             Debug.Log("savepoint");
-            _savePointSub.OnNext(_savePointPos);
+            _savePoint.Value = _savePointPos;
+            //_savePointSub.OnNext(_savePointPos);
         }
     }
 }
