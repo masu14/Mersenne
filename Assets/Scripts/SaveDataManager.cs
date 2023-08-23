@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
-using System.IO;
-using UniRx;
+
 
 [Serializable]
 public class SaveDataManager 

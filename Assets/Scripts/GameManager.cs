@@ -42,24 +42,17 @@ public class GameManager : MonoBehaviour
                 Debug.Log($"セーブポイントの位置を変更しました:{x}");
             }).AddTo(this);
         }
-        
+        Load();     //セーブデータのロード
 
     }
 
     private void Start()
     {
-        Load();     //セーブデータのロード
-        _player.transform.position = _save._nowSavePos;
         
+        _player.transform.position = _save._nowSavePos;
+
     }
-    /*
-    void SaveGame(Vector2 data)
-    {
-        string jsonData = JsonUtility.ToJson(data);
-        File.WriteAllText(_savePath, jsonData);
-    }*/
-
-
+    
     public void Save()
     {
         
@@ -78,7 +71,6 @@ public class GameManager : MonoBehaviour
             string data = streamReader.ReadToEnd();
             streamReader.Close();
             _save = JsonUtility.FromJson<SaveDataManager>(data);
-            //playerPos = _save._nowSavePos;
             Debug.Log($"ロード時のnowSavePos:{_save._nowSavePos}");
         }
         else

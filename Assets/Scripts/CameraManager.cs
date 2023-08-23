@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
     private GameObject[] rawStages;
     private GameObject[] stages;
 
-    void Start()
+    void Awake()
     {
         //シーン中のすべてのStageオブジェクトを取得、ナンバリングする
         rawStages = GameObject.FindGameObjectsWithTag("Stage");
