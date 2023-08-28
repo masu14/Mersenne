@@ -6,7 +6,8 @@ using System.IO;
 
 public class GameManager : MonoBehaviour
 {
-    float waitTime = 2.0f;
+    [SerializeField] private float _loadWaitTime = 2.0f;                      //プレイヤーがDeadしてからロードされるまでの時間
+
     private string sceneName = "StageScene";
     private GameObject _player;
     private PlayerCore _playerCore;
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour
     
     private Vector2 playerPos;
     private Vector2 _playerStartPos = new Vector2(-5, 0);
+    private Vector2 _playerPosUp = new Vector2(0, 2);
 
     void Awake()
     {
@@ -49,7 +51,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         
-        _player.transform.position = _save._nowSavePos;
+        _player.transform.position = _save._nowSavePos + _playerPosUp;
 
     }
     
@@ -82,7 +84,7 @@ public class GameManager : MonoBehaviour
 
     void WaitGameRestart()
     {
-        Observable.Timer(TimeSpan.FromSeconds(waitTime)).Subscribe(_ => GameRestart());
+        Observable.Timer(TimeSpan.FromSeconds(_loadWaitTime)).Subscribe(_ => GameRestart());
     }
     private void GameRestart()
     {

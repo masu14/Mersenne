@@ -30,7 +30,7 @@ namespace Merusenne.Player.InputImpls
             _axisH.Value = Input.GetAxisRaw("Horizontal");
             _jump.Value = Input.GetButtonDown("Jump");
             _upSwitch.Value = Input.GetKeyDown(KeyCode.UpArrow);
-            _downSwitch.Value = Input.GetKeyDown(KeyCode.DownArrow);
+            _downSwitch.Value = Input.GetKeyDown(KeyCode.Tab);
             _shot.Value = Input.GetButtonDown("Fire1");
         }
 
