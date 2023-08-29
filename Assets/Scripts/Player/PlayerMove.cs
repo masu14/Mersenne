@@ -27,6 +27,8 @@ namespace Merusenne.Player
         private float _jumpTime;                            //_jumpCurveの定義域
         private float beforeAxisH;                          //前フレームの横入力
         //private float _groundDistance = 0.5f;
+        private Vector3 _playerWide = new Vector3(0.35f, 0, 0);
+
 
         
         private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);  //体の向き,ショットPrefabに送信
@@ -128,13 +130,24 @@ namespace Merusenne.Player
         
 
         //地上判定
-        private void ChecKGround()
+        private bool ChecKGround()
         {
-            //_onGround = Physics2D.Raycast(transform.position, -transform.up, _groundDistance, _groundLayer);
-            _onGround = Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer);
-            
+            bool isGround = Physics2D.Linecast(transform.position + _playerWide, transform.position + _playerWide - transform.up * 0.1f, _groundLayer) ||
+                            Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer) ||
+                            Physics2D.Linecast(transform.position - _playerWide, transform.position - _playerWide - transform.up * 0.1f, _groundLayer);
 
+            _onGround = isGround;
             IsGrounded.Value = _onGround;
+
+            return _onGround;
+
+            /*
+            if (Physics2D.Linecast(transform.position + _playerFront, transform.position + _playerFront - transform.up * 0.1f, _groundLayer)) return (_onGround =true, IsGrounded.Value = _onGround);
+            if (Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer)) return (_onGround= true, IsGrounded.Value = _onGround);
+            if (Physics2D.Linecast(transform.position - _playerFront, transform.position - _playerFront - transform.up * 0.1f, _groundLayer)) return (_onGround =true, IsGrounded.Value = _onGround);
+
+            return (_onGround = false, IsGrounded.Value = _onGround);
+            */    
         }
 
         //Dead時に跳ね上がる動き
