@@ -140,14 +140,6 @@ namespace Merusenne.Player
             IsGrounded.Value = _onGround;
 
             return _onGround;
-
-            /*
-            if (Physics2D.Linecast(transform.position + _playerFront, transform.position + _playerFront - transform.up * 0.1f, _groundLayer)) return (_onGround =true, IsGrounded.Value = _onGround);
-            if (Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer)) return (_onGround= true, IsGrounded.Value = _onGround);
-            if (Physics2D.Linecast(transform.position - _playerFront, transform.position - _playerFront - transform.up * 0.1f, _groundLayer)) return (_onGround =true, IsGrounded.Value = _onGround);
-
-            return (_onGround = false, IsGrounded.Value = _onGround);
-            */    
         }
 
         //DeadéûÇ…íµÇÀè„Ç™ÇÈìÆÇ´

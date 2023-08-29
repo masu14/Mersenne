@@ -1,24 +1,71 @@
+using Merusenne.Player.InputImpls;
 using UnityEngine;
+using System;
+using UniRx;
+
 
 public class ThroughFloorController : MonoBehaviour
 {
-    PlatformEffector2D platformEffector2D;
+    private BoxCollider2D _myCollider;
+    private GameObject _player;
+    private InputEventProviderImpl _inputEventProvider;
     
+
+    private IDisposable subscription;
+    private bool _canThroughDown = false;
+    private float _throughTime = 1f;
+    private bool _isCooldown = false;
+    private bool _isDown = false;
     void Start()
     {
-        platformEffector2D = GetComponent<PlatformEffector2D>();
+        _myCollider = GetComponent<BoxCollider2D>();
+        _player = GameObject.FindWithTag("Player");
+        _inputEventProvider = _player.GetComponent<InputEventProviderImpl>();
+        subscription = _inputEventProvider.IsThrough
+            .Throttle(TimeSpan.FromSeconds(0.2))
+            .Subscribe(x => _canThroughDown = x);
+
     }
 
+    
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.DownArrow))
+
+        if(_canThroughDown && _isDown)
         {
-            platformEffector2D.rotationalOffset = 180f;
+            _myCollider.enabled = false;
+            _isCooldown = true;
+            Observable.Timer(TimeSpan.FromSeconds(_throughTime)).Subscribe(_ => EnableCollider());
         }
-        else if (Input.GetButtonDown("Jump"))//InputEventProviderÇ≈èàóùÇ∑Ç◊Ç´Ç»ÇÃÇ≈å„ÇŸÇ«èCê≥
+       
+    }
+
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
         {
-            platformEffector2D.rotationalOffset = 0f;
+            _isDown = true;
+            Debug.Log("Ç∑ÇËî≤ÇØâ¬î\");
         }
     }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
+        {
+            _isDown = true;
+            Debug.Log("Ç∑ÇËî≤ÇØïsâ¬î\");
+        }
+    }
+
+    private void EnableCollider()
+    {
+        _myCollider.enabled = true;
+        _isCooldown = false;
+    }
+
+
+
 }

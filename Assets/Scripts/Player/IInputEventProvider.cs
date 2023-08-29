@@ -10,5 +10,6 @@ namespace Merusenne.Player
         IReadOnlyReactiveProperty<bool> IsUpSwitch { get; }
         IReadOnlyReactiveProperty<bool> IsDownSwitch { get; }
         IReadOnlyReactiveProperty<bool> IsShot { get; }
+        IReadOnlyReactiveProperty<bool> IsThrough { get; }
     }
 }
