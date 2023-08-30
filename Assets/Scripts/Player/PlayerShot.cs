@@ -47,15 +47,7 @@ namespace Merusenne.Player
 
 
             //ショット切り替え　blue=0, green=1, red=2
-            if (_inputEventProvider.IsDownSwitch.Value)
-            {
-                _shotSwitch.Value++;
-                if (_shotSwitch.Value > 2)
-                {
-                    _shotSwitch.Value = 0;
-                }
-            }
-
+            
             if (_inputEventProvider.IsUpSwitch.Value)
             {
                 _shotSwitch.Value--;
