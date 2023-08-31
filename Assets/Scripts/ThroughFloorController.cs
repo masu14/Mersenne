@@ -4,6 +4,9 @@ using System;
 using UniRx;
 
 
+/// <summary>
+/// ThroughFroor(すり抜け床)を制御するクラス
+/// </summary>
 public class ThroughFloorController : MonoBehaviour
 {
     private BoxCollider2D _myCollider;
@@ -11,61 +14,36 @@ public class ThroughFloorController : MonoBehaviour
     private InputEventProviderImpl _inputEventProvider;
     
 
-    private IDisposable subscription;
-    private bool _canThroughDown = false;
-    private float _throughTime = 1f;
-    private bool _isCooldown = false;
-    private bool _isDown = false;
+    private IDisposable _isDown;                            //下向き入力の購読
+    private bool _canThroughDown = false;                   //下向き入力長押しですり抜けフラグ
+    [SerializeField] private float _throughBorder = 0.2f;   //長押しの閾値 
     void Start()
     {
-        _myCollider = GetComponent<BoxCollider2D>();
-        _player = GameObject.FindWithTag("Player");
-        _inputEventProvider = _player.GetComponent<InputEventProviderImpl>();
-        subscription = _inputEventProvider.IsThrough
-            .Throttle(TimeSpan.FromSeconds(0.2))
+        _myCollider = GetComponent<BoxCollider2D>();                            //すり抜け床のコライダー取得
+        _player = GameObject.FindWithTag("Player");                             //プレイヤー取得
+        _inputEventProvider = _player.GetComponent<InputEventProviderImpl>();   //プレイヤーの入力取得
+
+        
+
+        //下向き入力を長押しで購読する
+        _isDown = _inputEventProvider.IsThrough
+            .Throttle(TimeSpan.FromSeconds(_throughBorder))
             .Subscribe(x => _canThroughDown = x);
 
     }
 
-    
-
     void Update()
     {
-
-        if(_canThroughDown && _isDown)
+        //すり抜けフラグが立つ または プレイヤーより上側にあるときコライダーを無効化する
+        //2つ目の条件はプレイヤーが床にめり込むのを避けるため
+        if(_canThroughDown ||(_player.transform.position.y < transform.position.y))
         {
             _myCollider.enabled = false;
-            _isCooldown = true;
-            Observable.Timer(TimeSpan.FromSeconds(_throughTime)).Subscribe(_ => EnableCollider());
         }
-       
-    }
-
-    
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Player")
+        else
         {
-            _isDown = true;
-            Debug.Log("すり抜け可能");
+            _myCollider.enabled = true;
         }
     }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Player")
-        {
-            _isDown = true;
-            Debug.Log("すり抜け不可能");
-        }
-    }
-
-    private void EnableCollider()
-    {
-        _myCollider.enabled = true;
-        _isCooldown = false;
-    }
-
-
 
 }
