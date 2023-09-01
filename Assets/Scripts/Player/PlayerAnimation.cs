@@ -46,47 +46,46 @@ namespace Merusenne.Player
         void Update()
         {
             //プレイヤーがDead時には処理を行わない
-            if (_playerCore.IsDead.Value == false)
+            if (_playerCore.IsDead.Value) return;
+            
+            //向きの調整、横入力の閾値を超えたら右向き(左向き)にする
+            if (_inputEventProvider.AxisH.Value > _AXISHBORDER)         //右向き
             {
-                //向きの調整、横入力の閾値を超えたら右向き(左向き)にする
-                if (_inputEventProvider.AxisH.Value > _AXISHBORDER)         //右向き
-                {
-                    transform.localScale = new Vector2(1, 1);
-                }
-                else if (_inputEventProvider.AxisH.Value < -_AXISHBORDER)   //左向き
-                {
-                    transform.localScale = new Vector2(-1, 1);
-                }
+                transform.localScale = new Vector2(1, 1);
+            }
+            else if (_inputEventProvider.AxisH.Value < -_AXISHBORDER)   //左向き
+            {
+                transform.localScale = new Vector2(-1, 1);
+            }
 
-                //プレイヤーの接地判定から地上と空中のモーションを切り替える
-                if (_playerMove.IsGrounded.Value)
+            //プレイヤーの接地判定から地上と空中のモーションを切り替える
+            if (_playerMove.IsGrounded.Value)
+            {
+                //地上
+                if (Math.Abs(_inputEventProvider.AxisH.Value) <= _AXISHBORDER)
                 {
-                    //地上
-                    if (Math.Abs(_inputEventProvider.AxisH.Value) <= _AXISHBORDER)
-                    {
-                        //静止
-                        _nowAnime = _stopAnime;
-                    }
-                    else
-                    {
-                        //移動
-                        _nowAnime = _moveAnime;
-                    }
+                    //静止
+                    _nowAnime = _stopAnime;
                 }
                 else
                 {
-                    //空中
-                    _nowAnime = _jumpAnime;
-                }
-
-                //アニメーションの切り替えを監視する
-                if (_nowAnime != _oldAnime)
-                {
-                    _oldAnime = _nowAnime;
-                    _animator.Play(_nowAnime);
+                    //移動
+                    _nowAnime = _moveAnime;
                 }
             }
-            
+            else
+            {
+                //空中
+                _nowAnime = _jumpAnime;
+            }
+
+            //アニメーションの切り替えを監視する
+            if (_nowAnime != _oldAnime)
+            {
+                _oldAnime = _nowAnime;
+                _animator.Play(_nowAnime);
+            }
+
         }
 
 

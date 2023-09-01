@@ -2,115 +2,82 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UniRx;
 
+/// <summary>
+/// Barrierを制御するクラス
+/// Barrierは親オブジェクトのGimmickObjectにショットが衝突したときその色に応じて明滅する
+/// lightが点いているときコライダーがアクティブ、消えているとき非アクティブ状態になる
+/// </summary>
 public class BarrierController : MonoBehaviour
 {
     private Light2D _barrierLight;                              //子オブジェクトのLight
-
+    private BoxCollider2D boxCollider2D;                        //アクティブ状態の管理に使用
     private GimmickController grandGimmick;                     //祖父オブジェクトのGimmickController
+
+    //パラメータ
     [SerializeField] private bool _barrierActive = false;       //Barrier明滅フラグ
 
-    private Color32 _blue = new Color32(127, 255, 255, 255);    //青
-    private Color32 _green = new Color32(56, 241, 104, 255);    //緑
-    private Color32 _red = new Color32(231, 69, 69, 255);       //赤
-
-    BoxCollider2D boxCollider2D;                                //アクティブ状態の管理に使用
+    //light2Dの色
+    private Color32 _blue = new Color32(127, 255, 255, 255);    //青色
+    private Color32 _green = new Color32(56, 241, 104, 255);    //緑色
+    private Color32 _red = new Color32(231, 69, 69, 255);       //赤色
+    private Color32 _clear = Color.clear;                       //無色
+   
 
     private void Start()
     {
-        _barrierLight = transform.GetChild(0).gameObject.GetComponent<Light2D>();
-        boxCollider2D = transform.GetComponent<BoxCollider2D>();
-        grandGimmick = transform.parent.gameObject.transform.parent.gameObject.GetComponent<GimmickController>();
+        _barrierLight = transform.GetChild(0).gameObject.GetComponent<Light2D>();                                   //Barrierのlight取得
+        boxCollider2D = transform.GetComponent<BoxCollider2D>();                                                    //Barrierのコライダー取得
+        grandGimmick = transform.parent.gameObject.transform.parent.gameObject.GetComponent<GimmickController>();   //祖父のGimmick取得
 
+        
         if (grandGimmick != null)
         {
-            //Debug.Log("祖父オブジェクトの名前：" + grandGimmick.name);
-        }
-        else
-        {
-            Debug.Log("祖父オブジェクトはいません" + gameObject.name);
-        }
-
-        if (grandGimmick != null)
-        {
-            grandGimmick.OnCollisionObj.Subscribe(SwitchBarrierLight);      //ショット衝突の受信
+            //ショット衝突の購読
+            grandGimmick.OnCollisionObj.Subscribe(SwitchBarrierLight);      
         }
 
         //Barrierの初期化
         if (_barrierActive == false)
         {
             boxCollider2D.enabled = false;
-            _barrierLight.color = new Color32(0, 0, 0, 0);
+            _barrierLight.color = _clear;
         }
     }
 
     
-
+    //プレイヤーのショット衝突時に呼び出す、Barrierと同じ色のショットが衝突すると色とコライダーが変化する
     private void SwitchBarrierLight(GameObject gameObject)
     {
-        //青Barrierの発光、消滅
-        if (gameObject.tag == "Shot_blue")
+        //ショットのタグ確認
+        if (gameObject.CompareTag("Shot_blue") || gameObject.CompareTag("Shot_green") || gameObject.CompareTag("Shot_red"))
         {
-            if(this.gameObject.tag == "Barrier_blue")
-            {
-                if (_barrierActive) //消滅
-                {
-                    boxCollider2D.enabled = false;
-                    _barrierLight.color = new Color32(0, 0, 0, 0);
-                    _barrierActive = !_barrierActive;
-                }
-                else　              //発光
-                {
-                    boxCollider2D.enabled = true;
-                    _barrierLight.color = _blue;
-                    _barrierActive = !_barrierActive;
-                }
-            }
-            
-        }
+            string barrierTag = $"Barrier_{gameObject.tag.Substring(5)}";   //"Shot_blue" => "Barrier_blue"
 
-        //緑Barrierの発光、消滅
-        if (gameObject.tag == "Shot_green")
-        {
-            if (this.gameObject.tag == "Barrier_green")
+            //ショットの自身のタグから対応した色とコライダーを切り替える
+            if (this.gameObject.CompareTag(barrierTag))
             {
-                if (_barrierActive)
-                {
-                    boxCollider2D.enabled = false;
-                    _barrierLight.color = new Color32(0, 0, 0, 0);
-                    _barrierActive = !_barrierActive;
-                }
-                else
-                {
-                    boxCollider2D.enabled = true;
-                    _barrierLight.color = _green;
-                    _barrierActive = !_barrierActive;
-                }
-            }
+                _barrierActive = !_barrierActive;
+                boxCollider2D.enabled = _barrierActive;
+                _barrierLight.color = _barrierActive ? GetBarrierColor(gameObject.tag) : _clear;
 
-        }
-        //赤Barrierの発光、消滅
-        if (gameObject.tag == "Shot_red")
-        {
-            if (this.gameObject.tag == "Barrier_red")
-            {
-                
-                if (_barrierActive) //消滅
-                {
-                    boxCollider2D.enabled = false;
-                    _barrierLight.color = new Color32(0, 0, 0, 0);
-                    _barrierActive = !_barrierActive;
-                }
-                else　             //発光
-                {
-                    boxCollider2D.enabled = true;
-                    _barrierLight.color = _red;
-                    _barrierActive = !_barrierActive;
-                }
             }
-
         }
     }
-    
+    //衝突したショットのタグから対応した色を返す
+    private Color32 GetBarrierColor(string shotTag)
+    {
+        switch (shotTag)
+        {
+            case "Shot_blue":   //青色
+                return _blue;   
+            case "Shot_green":  //緑色
+                return _green;
+            case "Shot_red":    //赤色
+                return _red;
+            default:            //無色
+                return _clear;
+        }
+    }
 
     
 }

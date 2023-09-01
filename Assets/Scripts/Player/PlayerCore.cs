@@ -8,15 +8,16 @@ using System;
 public class PlayerCore : MonoBehaviour
 {                              
     private readonly ReactiveProperty<bool> _isDead = new ReactiveProperty<bool>(false);        //Deadフラグ
-    private Subject<Unit> onDeadSubject = new Subject<Unit>();                                  //Dead通知
+    private Subject<Unit> _onDead = new Subject<Unit>();                                        //Dead通知
 
     public IReadOnlyReactiveProperty<bool> IsDead => _isDead;
-    public IObservable<Unit> OnDead => onDeadSubject;
+    public IObservable<Unit> OnDead => _onDead;
 
     void Start()
     {
-        //Dead通知を送信
+        //OnDestroy時にDispose()されるように登録
         _isDead.AddTo(this);
+        _onDead.AddTo(this);
     }
 
     //Deadタグのオブジェクトに衝突したらDead状態になる
@@ -25,8 +26,9 @@ public class PlayerCore : MonoBehaviour
         if (collision.CompareTag("Dead"))
         {
             _isDead.Value = true;
-            onDeadSubject.OnNext(Unit.Default);
+            _onDead.OnNext(Unit.Default);
         }
     }
+
 
 }

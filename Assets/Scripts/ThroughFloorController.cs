@@ -28,7 +28,8 @@ public class ThroughFloorController : MonoBehaviour
         //‰ºŒü‚«“ü—Í‚ð’·‰Ÿ‚µ‚Åw“Ç‚·‚é
         _isDown = _inputEventProvider.IsThrough
             .Throttle(TimeSpan.FromSeconds(_throughBorder))
-            .Subscribe(x => _canThroughDown = x);
+            .Subscribe(x => _canThroughDown = x)
+            .AddTo(this);
 
     }
 

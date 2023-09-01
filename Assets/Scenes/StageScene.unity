@@ -341,6 +341,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1115181327}
     m_Modifications:
+    - target: {fileID: 6688402455253347832, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
+      propertyPath: m_Name
+      value: SaveLight
+      objectReference: {fileID: 0}
     - target: {fileID: 6688402456078185521, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
       propertyPath: m_Name
       value: SavePoint (2)
@@ -1828,7 +1832,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8638941004059675971, guid: 75ccea98260fa654cb55b624e750909d, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8638941004059675971, guid: 75ccea98260fa654cb55b624e750909d, type: 3}
       propertyPath: m_LocalScale.x
@@ -2211,9 +2215,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _xDashSpeed: 5
-  _jump: 14
-  _deadJump: 15
-  _deadGravity: 30
+  _xFriSpeed: 6
+  jumpSpeed: {x: 0, y: 14}
+  _deadJump: 10
   _groundLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -2245,8 +2249,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.0000010179356
-      value: 1
+      time: 0.008333079
+      value: 1.004702
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2254,8 +2258,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.05052185
-      value: 0.10823822
+      time: 0.9708252
+      value: -0.4952507
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2277,11 +2281,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fe754af74ffe8943b285ce0aec4d263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _goShotTime: 1
+  _goShotTime: 0.3
   _shotBluePrefab: {fileID: -4115163352299950596, guid: d62a84915e1c4ef46acff50e444b36e7, type: 3}
   _shotGreenPrefab: {fileID: 312232937777787888, guid: 1ec8f6c6b0b16f240a2eb816657d4017, type: 3}
   _shotRedPrefab: {fileID: 3892155736186381614, guid: 79e0b23718846be4093a45954616a8fe, type: 3}
-  _playerMove: {fileID: 640999645}
 --- !u!95 &640999647
 Animator:
   serializedVersion: 4
@@ -3184,6 +3187,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1115181327}
     m_Modifications:
+    - target: {fileID: 6688402455253347832, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
+      propertyPath: m_Name
+      value: SaveLight
+      objectReference: {fileID: 0}
     - target: {fileID: 6688402456078185521, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
       propertyPath: m_Name
       value: SavePoint (1)
@@ -52640,9 +52647,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1115181327}
     m_Modifications:
+    - target: {fileID: 6688402455253347832, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
+      propertyPath: m_Name
+      value: SaveLight
+      objectReference: {fileID: 0}
     - target: {fileID: 6688402456078185521, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
       propertyPath: m_Name
-      value: SavePoint
+      value: SavePoint (3)
       objectReference: {fileID: 0}
     - target: {fileID: 6688402456078185524, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
       propertyPath: m_RootOrder
@@ -53202,6 +53213,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1115181327}
     m_Modifications:
+    - target: {fileID: 6688402455253347832, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
+      propertyPath: m_Name
+      value: SaveLight
+      objectReference: {fileID: 0}
     - target: {fileID: 6688402456078185521, guid: ac22abe9e423cde4893ff9fa1dd7e727, type: 3}
       propertyPath: m_Name
       value: SavePoint

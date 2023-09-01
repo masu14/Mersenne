@@ -1,26 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// ステージの隠し通路用のカバーを制御するクラス
+/// </summary>
 public class GrayCoverController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+ 
+    //触れたら消える
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Player")
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }

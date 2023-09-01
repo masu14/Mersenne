@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6688402455253347833}
   - component: {fileID: 6688402455253347838}
   m_Layer: 0
-  m_Name: Light 2D
+  m_Name: SaveLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -210,7 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca5ef6192ae3a854b93487cc8203a096, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _savePointNum: 0
 --- !u!70 &6688402456078185525
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

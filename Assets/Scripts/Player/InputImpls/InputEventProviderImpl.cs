@@ -12,6 +12,7 @@ namespace Merusenne.Player.InputImpls
         private readonly ReactiveProperty<bool> _shot = new ReactiveProperty<bool>(false);          //ショット発射、(Ctrlキー入力)
         private readonly ReactiveProperty<bool> _throughFloor = new ReactiveProperty<bool>(false);  //すり抜け床を降りる、(下矢印キー入力)
 
+        //入力の送信
         public IReadOnlyReactiveProperty<float> AxisH => _axisH;
         public IReadOnlyReactiveProperty<bool> IsJump => _jump;
         public IReadOnlyReactiveProperty<bool> IsUpSwitch => _upSwitch;
@@ -19,7 +20,7 @@ namespace Merusenne.Player.InputImpls
         public IReadOnlyReactiveProperty<bool> IsThrough => _throughFloor;
         void Start()
         {
-            //入力の送信
+            //OnDestroy時にDispose()されるように登録
             _axisH.AddTo(this);
             _jump.AddTo(this);
             _upSwitch.AddTo(this);
