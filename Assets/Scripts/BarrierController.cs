@@ -10,8 +10,8 @@ using UniRx;
 public class BarrierController : MonoBehaviour
 {
     private Light2D _barrierLight;                              //子オブジェクトのLight
-    private BoxCollider2D boxCollider2D;                        //アクティブ状態の管理に使用
-    private GimmickController grandGimmick;                     //祖父オブジェクトのGimmickController
+    private BoxCollider2D _boxCollider2D;                        //アクティブ状態の管理に使用
+    private GimmickController _grandGimmick;                     //祖父オブジェクトのGimmickController
 
     //パラメータ
     [SerializeField] private bool _barrierActive = false;       //Barrier明滅フラグ
@@ -26,20 +26,20 @@ public class BarrierController : MonoBehaviour
     private void Start()
     {
         _barrierLight = transform.GetChild(0).gameObject.GetComponent<Light2D>();                                   //Barrierのlight取得
-        boxCollider2D = transform.GetComponent<BoxCollider2D>();                                                    //Barrierのコライダー取得
-        grandGimmick = transform.parent.gameObject.transform.parent.gameObject.GetComponent<GimmickController>();   //祖父のGimmick取得
+        _boxCollider2D = transform.GetComponent<BoxCollider2D>();                                                    //Barrierのコライダー取得
+        _grandGimmick = transform.parent.gameObject.transform.parent.gameObject.GetComponent<GimmickController>();   //祖父のGimmick取得
 
         
-        if (grandGimmick != null)
+        if (_grandGimmick != null)
         {
             //ショット衝突の購読
-            grandGimmick.OnCollisionObj.Subscribe(SwitchBarrierLight);      
+            _grandGimmick.OnCollisionObj.Subscribe(SwitchBarrierLight);      
         }
 
         //Barrierの初期化
         if (_barrierActive == false)
         {
-            boxCollider2D.enabled = false;
+            _boxCollider2D.enabled = false;
             _barrierLight.color = _clear;
         }
     }
@@ -57,7 +57,7 @@ public class BarrierController : MonoBehaviour
             if (this.gameObject.CompareTag(barrierTag))
             {
                 _barrierActive = !_barrierActive;
-                boxCollider2D.enabled = _barrierActive;
+                _boxCollider2D.enabled = _barrierActive;
                 _barrierLight.color = _barrierActive ? GetBarrierColor(gameObject.tag) : _clear;
 
             }

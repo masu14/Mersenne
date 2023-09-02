@@ -23,9 +23,8 @@ public class GimmickController : MonoBehaviour
     private Subject<GameObject> _collisionObject = new Subject<GameObject>();
 
     //衝突したショットとその色を送信
-    public IObservable<Color32> OnCollision => _collisionColor;
     public IObservable<GameObject> OnCollisionObj => _collisionObject;
-
+    public IObservable<Color32> OnCollision => _collisionColor;
 
     //ショットと衝突したときにギミック作動
     private void OnCollisionEnter2D(Collision2D collision)

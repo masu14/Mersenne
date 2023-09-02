@@ -57,10 +57,6 @@ namespace Merusenne.Player
             _playerCore.OnDead.Subscribe(_ => DeadMove()).AddTo(this);
         }
 
-        private void Start()
-        {
-            
-        }
         //“ü—Í‚Ì‘—M‚ÌŒŸ’m‚ÍUpdate‚Åˆ—‚·‚é
         void Update()
         {

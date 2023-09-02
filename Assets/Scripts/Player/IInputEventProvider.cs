@@ -2,8 +2,11 @@ using UniRx;
 
 namespace Merusenne.Player
 {
-    //入力を定義するインターフェース、参照から入力イベントに依存したスクリプトに移動できる
-    //入力の差し替えはここから行う
+    /// <summary>
+    ///入力を定義するインターフェース、参照から入力イベントに依存したスクリプトに移動できる
+    ///入力の差し替えはここから行う
+    /// </summary>
+
     public interface IInputEventProvider
     {
 

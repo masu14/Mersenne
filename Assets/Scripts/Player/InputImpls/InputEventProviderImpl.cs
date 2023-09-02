@@ -3,7 +3,10 @@ using UnityEngine;
 
 namespace Merusenne.Player.InputImpls
 {
-    //入力を管理するクラス,ここで受け取った入力をUniRxを用いて他クラスに送信する
+    /// <summary>
+    /// 入力を管理するクラス,ここで受け取った入力をUniRxを用いて他クラスに送信する
+    /// </summary>
+    
     public class InputEventProviderImpl : MonoBehaviour, IInputEventProvider
     {
         private readonly ReactiveProperty<float> _axisH = new ReactiveProperty<float>(0);           //体の向き、横移動、(水平矢印キー入力)

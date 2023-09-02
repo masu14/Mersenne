@@ -53,12 +53,12 @@ public class ShotUICotroller : MonoBehaviour
     {
         switch (colorIndex)
         {
-            case 0:                     //青色
-                return "Blue_shot_UI";
-            case 1:                     //緑色
-                return "Green_shot_UI";
-            case 2:                     //赤色
-                return "Red_shot_UI";
+            case 0:                     
+                return "Blue_shot_UI";  //青色
+            case 1:                     
+                return "Green_shot_UI"; //緑色
+            case 2:                     
+                return "Red_shot_UI";   //赤色
             default:
                 return "";
         }

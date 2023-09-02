@@ -20,8 +20,7 @@ namespace Merusenne.Player
         [SerializeField] private ShotController _shotBluePrefab;                    //青ショット
         [SerializeField] private ShotController _shotGreenPrefab;                   //緑ショット
         [SerializeField] private ShotController _shotRedPrefab;                     //赤ショット
-
-                    
+       
         private Vector3 _shotPoint;                                                 //ショットが生成される位置
         private bool _goShot = false;                                               //ショットフラグ
         private bool _shotxDir = false;                                             //ショット発射向き(true:右向き、false:左向き)
@@ -31,7 +30,6 @@ namespace Merusenne.Player
 
         //ショットの切り替えを送信
         public IReactiveProperty<int> OnShotSwitch => _shotSwitch;
-
 
         void Start()
         {
@@ -49,11 +47,12 @@ namespace Merusenne.Player
 
         void Update()
         {
-            if (_inputEventProvider.AxisH.Value > _AXISHBORDER)
+            //入力を受け取ってショット生成の向きを決める
+            if (_inputEventProvider.AxisH.Value > _AXISHBORDER)         //右向き
             {
                 _shotxDir = true;
             }
-            else if (_inputEventProvider.AxisH.Value < -_AXISHBORDER)
+            else if (_inputEventProvider.AxisH.Value < -_AXISHBORDER)   //左向き
             {
                 _shotxDir = false;
 
@@ -63,6 +62,7 @@ namespace Merusenne.Player
             //ショット切り替え　blue=0, green=1, red=2
             if (_inputEventProvider.IsUpSwitch.Value)
             {
+                //0=>1=>2=>0の順番で切り替わる
                 _shotSwitch.Value--;
                 if (_shotSwitch.Value < 0)
                 {
@@ -82,41 +82,28 @@ namespace Merusenne.Player
         //ショットの生成
         void Shot()
         {
-            //ショットの色と体の向きで場合分け
+            ShotController shotPrefab = null;
+
+            //色番号から生成するショットを決める
             switch (_shotSwitch.Value)
             {
                 case 0: //青ショット
-                    if (_shotxDir)
-                    {
-                        Instantiate(_shotBluePrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
-                    }
-                    else
-                    {
-                        Instantiate(_shotBluePrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
-                    }
+                    shotPrefab = _shotBluePrefab;
                     break;
                 case 1: //緑ショット
-                    if (_shotxDir)
-                    {
-                        Instantiate(_shotGreenPrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
-                    }
-                    else
-                    {
-                        Instantiate(_shotGreenPrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
-                    }
+                    shotPrefab = _shotGreenPrefab;
                     break;
                 case 2: //赤ショット
-                    if (_shotxDir)
-                    {
-                        Instantiate(_shotRedPrefab, transform.position + _shotPoint, Quaternion.identity);    //右向き
-                    }
-                    else
-                    {
-                        Instantiate(_shotRedPrefab, transform.position + new Vector3(-_shotPoint.x, _shotPoint.y, 0), Quaternion.identity);    //左向き
-                    }
+                    shotPrefab = _shotRedPrefab;
                     break;
             }
-            
+
+            //体の向きからショットが生成される位置を決める
+            Vector3 shotPosition = transform.position + (_shotxDir ? _shotPoint : new Vector3(-_shotPoint.x, _shotPoint.y, 0));
+
+            //ショット生成
+            Instantiate(shotPrefab, shotPosition, Quaternion.identity);
+          
         }
 
         //待機時間が経過したらショットの発射が可能になる

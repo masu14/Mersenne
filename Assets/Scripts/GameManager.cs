@@ -48,7 +48,8 @@ public class GameManager : MonoBehaviour
                     _save._nowSavePos = x;
 
                     Debug.Log($"セーブポイントの位置を変更しました:{x}");
-                }).AddTo(this);
+                })
+                .AddTo(this);
         }
 
     }
