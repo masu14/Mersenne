@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private string _sceneName = "StageScene";                               //ロードするシーン名
     private string _filePath;                                               //セーブデータの保存先
     private Vector2 _playerStartPos = new Vector2(-5, 0);                   //セーブデータがないときのプレイヤーの開始位置
-    private Vector2 _playerPosUp = new Vector2(0, 2);                       //セーブポイント上空のプレイヤーの開始位置
+    private Vector2 _playerPosUp = new Vector2(0, 0.5f);                       //セーブポイント上空のプレイヤーの開始位置
 
     private Subject<Vector2> _saveStage = new Subject<Vector2>();
     public IObservable<Vector2> OnSaveStage => _saveStage;
