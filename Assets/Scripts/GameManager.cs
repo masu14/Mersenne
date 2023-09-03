@@ -10,7 +10,6 @@ using System.IO;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    
     private GameObject _player;
     private PlayerCore _playerCore;
     private SavePointController[] _savePoints;
@@ -24,6 +23,8 @@ public class GameManager : MonoBehaviour
     private Vector2 _playerStartPos = new Vector2(-5, 0);                   //セーブデータがないときのプレイヤーの開始位置
     private Vector2 _playerPosUp = new Vector2(0, 2);                       //セーブポイント上空のプレイヤーの開始位置
 
+    private Subject<Vector2> _saveStage = new Subject<Vector2>();
+    public IObservable<Vector2> OnSaveStage => _saveStage;
     void Awake()
     {
         _player = GameObject.FindWithTag("Player");                         //プレイヤー取得
@@ -33,10 +34,15 @@ public class GameManager : MonoBehaviour
         _savePoints = FindObjectsOfType<SavePointController>();             //シーン上の全てセーブポイントを取得
 
         //セーブデータのロード
-        Load();     
+        Load();
+        _saveStage.OnNext(_save._nowStagePos);                              //ロード時のステージの送信、CameraManagerが購読
+        Debug.Log($"ロード時のnowStagePos:{_save._nowStagePos}");
+
 
         //プレイヤーDead時に一定時間をおいてリロード、OnDestroy時にDispose()されるように登録
-        _playerCore.OnDead.Subscribe(_ => WaitGameRestart()).AddTo(this);
+        _playerCore.OnDead
+            .Subscribe(_ => WaitGameRestart())
+            .AddTo(this);
 
         //全てのセーブポイントを購読
         foreach (var savePoint in _savePoints)
@@ -50,12 +56,22 @@ public class GameManager : MonoBehaviour
                     Debug.Log($"セーブポイントの位置を変更しました:{x}");
                 })
                 .AddTo(this);
+
+            savePoint.OnTriggerStage
+                .Subscribe(x =>
+                {
+                    _save._nowStagePos = x;
+                    Debug.Log($"セーブポイントのあるステージの位置を保存しました{x}");
+                })
+                .AddTo(this);
         }
+
 
     }
 
     private void Start()
     {
+       
         _player.transform.position = _save._nowSavePos + _playerPosUp;      //ロード時のプレイヤーの開始位置
 
     }
@@ -80,6 +96,7 @@ public class GameManager : MonoBehaviour
             streamReader.Close();                                       //ファイルを閉じて読み込み終了
             _save = JsonUtility.FromJson<SaveDataManager>(data);        //json文字列をセーブデータに変換
             Debug.Log($"ロード時のnowSavePos:{_save._nowSavePos}");
+            
         }
         else                           //ファイルが存在しないとき
         {
