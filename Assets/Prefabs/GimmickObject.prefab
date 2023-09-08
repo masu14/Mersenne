@@ -100,12 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointLight: {fileID: 1553713752058941003}
-  lightBlue: 0
-  lightGreen: 0
-  lightRed: 0
-  shotCollision: 0
-  barrierObject: {fileID: 0}
-  luminaBoard: {fileID: 0}
+  _flashSpeed: 4
 --- !u!61 &1553713751919469557
 BoxCollider2D:
   m_ObjectHideFlags: 0

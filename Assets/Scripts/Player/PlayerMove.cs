@@ -17,11 +17,14 @@ namespace Merusenne.Player
         //プレイヤーの移動のパラメータ
         [SerializeField] private float _xDashSpeed = 3.0f;                  //地上での速さ
         [SerializeField] private float _xFriSpeed = 2.5f; 　　              //空中での速さ
-        [SerializeField] private Vector2 jumpSpeed = new Vector2(0, 14);    //ジャンプ力
+        [SerializeField] private float _jumpPower = 14;                      //ジャンプ力
+        [SerializeField] private float _maxJumpSpeed = 14;                  //ジャンプ速度の最大値
+        [SerializeField] private float _maxFallSpeed = 14;                  //落下速度の最大値
         [SerializeField] private float _deadJump = 10f;                     //dead時演出のジャンプ
         [SerializeField] private LayerMask _groundLayer;                    //地面レイヤー指定
         [SerializeField] private AnimationCurve _speedCurve;                //横移動の速度のグラフ
-        [SerializeField] private AnimationCurve _jumpCurve;                 //ジャンプの速度のグラフ
+
+        
 
         //フラグ
         private bool _isJump = false;                           //ジャンプフラグ
@@ -32,6 +35,7 @@ namespace Merusenne.Player
         private float beforeAxisH;                              //前フレームの横入力
         private Vector3 _playerWide = new Vector3(0.35f, 0, 0); //プレイヤーの横幅
         private const float _AXISHBORDER = 0.15f;               //横入力の閾値
+        
 
 
         private ReactiveProperty<bool> _playerxDir = new ReactiveProperty<bool>(true);  //体の向き,ショットPrefabに送信
@@ -124,10 +128,23 @@ namespace Merusenne.Player
             {
                 _isJump = false;
                 Debug.Log("ジャンプ");
-                _rbody.velocity = jumpSpeed;
+                _rbody.AddForce(new Vector2(0, _jumpPower), ForceMode2D.Impulse);//ジャンプ速度の制限
+                
             }
 
-           
+            //ジャンプの最大速度
+            if (_rbody.velocity.y > _maxJumpSpeed)
+            {
+                _rbody.velocity = new Vector2(_rbody.velocity.x, _maxJumpSpeed);
+            }
+
+            //落下速度の最大速度
+            if(_rbody.velocity.y < - _maxFallSpeed)
+            {
+                _rbody.velocity = new Vector2(_rbody.velocity.x, -_maxFallSpeed);
+
+            }
+
         }
 
         

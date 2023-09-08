@@ -16,7 +16,9 @@ public class GimmickController : MonoBehaviour
     private Color32 _green = new Color32(56, 241, 104, 255);    //緑色
     private Color32 _red = new Color32(231, 69, 69, 255);       //赤色
     private Color32 _clear = Color.clear;                       //無色
+    private float _time = 0f;
 
+    [SerializeField] float _flashSpeed = 2.0f;
 
     //UniRxのSubjectを定義
     private Subject<Color32> _collisionColor = new Subject<Color32>();
@@ -25,6 +27,12 @@ public class GimmickController : MonoBehaviour
     //衝突したショットとその色を送信
     public IObservable<GameObject> OnCollisionObj => _collisionObject;
     public IObservable<Color32> OnCollision => _collisionColor;
+
+    private void Update()
+    {
+        _time += Time.deltaTime;
+        pointLight.intensity = Mathf.Sin(_time* _flashSpeed);
+    }
 
     //ショットと衝突したときにギミック作動
     private void OnCollisionEnter2D(Collision2D collision)

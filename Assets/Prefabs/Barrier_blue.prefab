@@ -236,5 +236,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89f158afb35469d4593cc73a3689bd67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetGimmickController: {fileID: 0}
-  freeFormLight: {fileID: 8918772473468432704}
+  _barrierActive: 0
