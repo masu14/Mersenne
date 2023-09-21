@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private string _sceneName = "StageScene";                               //ロードするシーン名
     private string _filePath;                                               //セーブデータの保存先
     private Vector2 _playerStartPos = new Vector2(-5, 0);                   //セーブデータがないときのプレイヤーの開始位置
-    private Vector2 _playerPosUp = new Vector2(0, 0.5f);                       //セーブポイント上空のプレイヤーの開始位置
+    private Vector2 _playerPosUp = new Vector2(0, 0.5f);                       //セーブポイント上空のプレイヤーの開始出現位置
 
     private Subject<Vector2> _saveStage = new Subject<Vector2>();
     public IObservable<Vector2> OnSaveStage => _saveStage;
@@ -33,9 +33,8 @@ public class GameManager : MonoBehaviour
         _save = new SaveDataManager();                                      //セーブデータの管理先取得
         _savePoints = FindObjectsOfType<SavePointController>();             //シーン上の全てセーブポイントを取得
 
-        //セーブデータのロード
-        Load();
-        _saveStage.OnNext(_save._nowStagePos);                              //ロード時のステージの送信、CameraManagerが購読
+        
+       
         Debug.Log($"ロード時のnowStagePos:{_save._nowStagePos}");
 
 
@@ -61,12 +60,15 @@ public class GameManager : MonoBehaviour
                 .Subscribe(x =>
                 {
                     _save._nowStagePos = x;
-                    Debug.Log($"セーブポイントのあるステージの位置を保存しました{x}");
+                    Debug.Log($"セーブポイントのあるステージの位置を変更しました{x}");
                 })
                 .AddTo(this);
         }
 
-
+        //セーブデータのロード
+        Load();
+        _saveStage.OnNext(_save._nowStagePos);                              //ロード時のステージの送信、CameraManagerが購読
+       
     }
 
     private void Start()
@@ -103,6 +105,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("セーブデータが見つかりません。新しいゲームを開始します。");
             _save._nowSavePos = _playerStartPos;                        //デフォルトのプレイヤーの開始位置を格納
         }
+
+        
     }
 
     //プレイヤーDead時に一定時間待つ

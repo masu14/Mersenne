@@ -39,7 +39,7 @@ public class ShotUICotroller : MonoBehaviour
         if (!string.IsNullOrEmpty(expectedTag) && gameObject.CompareTag(expectedTag))
         {
             GetComponent<Image>().color = _onColor;     //–¾‚é‚ß
-            Debug.Log(expectedTag);
+            //Debug.Log(expectedTag);
         }
         else
         {

@@ -127,7 +127,7 @@ namespace Merusenne.Player
             if (IsGrounded.Value && _isJump)    //地面の上＆ジャンプフラグ
             {
                 _isJump = false;
-                Debug.Log("ジャンプ");
+                //Debug.Log("ジャンプ");
                 _rbody.AddForce(new Vector2(0, _jumpPower), ForceMode2D.Impulse);//ジャンプ速度の制限
                 
             }

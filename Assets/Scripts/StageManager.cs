@@ -4,12 +4,9 @@ using System;
 
 public class StageManager : MonoBehaviour
 {
-    //public int stageNum;
-    //[SerializeField] private CameraManager mainCamera;      //カメラ取得
+    private Subject<Vector2> playerEnter = new Subject<Vector2>();
 
-    private Subject<Unit> playerEnter = new Subject<Unit>();
-
-    public IObservable<Unit> OnPlayerEnter => playerEnter;
+    public IObservable<Vector2> OnPlayerEnter => playerEnter;
 
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -17,8 +14,7 @@ public class StageManager : MonoBehaviour
         //プレイヤーを検知したときnowStageを更新
         if(collision.gameObject.tag == "Player")
         {
-            playerEnter.OnNext(Unit.Default);
-            //mainCamera.nowStage = stageNum;
+            playerEnter.OnNext(transform.position);
         }
     }
 }
