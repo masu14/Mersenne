@@ -63,10 +63,10 @@ namespace Merusenne.Player
             if (_inputEventProvider.IsUpSwitch.Value)
             {
                 //0=>1=>2=>0ÇÃèáî‘Ç≈êÿÇËë÷ÇÌÇÈ
-                _shotSwitch.Value--;
-                if (_shotSwitch.Value < 0)
+                _shotSwitch.Value++;
+                if (_shotSwitch.Value >2)
                 {
-                    _shotSwitch.Value = 2;
+                    _shotSwitch.Value = 0;
                 }
             }
 

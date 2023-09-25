@@ -21,6 +21,9 @@ public class BarrierController : MonoBehaviour
     private Color32 _green = new Color32(56, 241, 104, 255);    //óŒêF
     private Color32 _red = new Color32(231, 69, 69, 255);       //ê‘êF
     private Color32 _clear = Color.clear;                       //ñ≥êF
+
+    private readonly ReactiveProperty<bool> _barrierState = new ReactiveProperty<bool>();
+    public IReadOnlyReactiveProperty<bool> OnBarrier => _barrierState; 
    
 
     private void Start()
@@ -40,8 +43,11 @@ public class BarrierController : MonoBehaviour
         if (_barrierActive == false)
         {
             _boxCollider2D.enabled = false;
+            _barrierState.Value = false;
             _barrierLight.color = _clear;
         }
+
+        _barrierState.AddTo(this);
     }
 
     
@@ -58,6 +64,7 @@ public class BarrierController : MonoBehaviour
             {
                 _barrierActive = !_barrierActive;
                 _boxCollider2D.enabled = _barrierActive;
+                _barrierState.Value = _barrierActive;
                 _barrierLight.color = _barrierActive ? GetBarrierColor(gameObject.tag) : _clear;
 
             }
