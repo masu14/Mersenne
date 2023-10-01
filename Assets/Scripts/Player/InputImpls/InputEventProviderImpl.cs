@@ -9,16 +9,18 @@ namespace Merusenne.Player.InputImpls
     
     public class InputEventProviderImpl : MonoBehaviour, IInputEventProvider
     {
-        private readonly ReactiveProperty<float> _axisH = new ReactiveProperty<float>(0);           //体の向き、横移動、(水平矢印キー入力)
+        private readonly ReactiveProperty<float> _axisH = new ReactiveProperty<float>(0);           //体の向き、横移動、(A,Dキー入力)
         private readonly ReactiveProperty<bool> _jump = new ReactiveProperty<bool>(false);          //ジャンプ、(Space入力)
-        private readonly ReactiveProperty<bool> _upSwitch = new ReactiveProperty<bool>(false);      //ショット切り替え、(上矢印キー入力) 
-        private readonly ReactiveProperty<bool> _shot = new ReactiveProperty<bool>(false);          //ショット発射、(Ctrlキー入力)
-        private readonly ReactiveProperty<bool> _throughFloor = new ReactiveProperty<bool>(false);  //すり抜け床を降りる、(下矢印キー入力)
+        private readonly ReactiveProperty<bool> _leftSwitch = new ReactiveProperty<bool>(false);    //ショット切り替え(左)、(左シフトキー入力) 
+        private readonly ReactiveProperty<bool> _rightSwitch = new ReactiveProperty<bool>(false);   //ショット切り替え(右)、(右シフトキー入力)
+        private readonly ReactiveProperty<bool> _shot = new ReactiveProperty<bool>(false);          //ショット発射、(Enterキー入力)
+        private readonly ReactiveProperty<bool> _throughFloor = new ReactiveProperty<bool>(false);  //すり抜け床を降りる、(Sキー入力)
 
         //入力の送信
         public IReadOnlyReactiveProperty<float> AxisH => _axisH;
         public IReadOnlyReactiveProperty<bool> IsJump => _jump;
-        public IReadOnlyReactiveProperty<bool> IsUpSwitch => _upSwitch;
+        public IReadOnlyReactiveProperty<bool> IsLeftSwitch => _leftSwitch;
+        public IReadOnlyReactiveProperty<bool> IsRightSwitch => _rightSwitch;
         public IReadOnlyReactiveProperty<bool> IsShot => _shot;
         public IReadOnlyReactiveProperty<bool> IsThrough => _throughFloor;
         void Start()
@@ -26,7 +28,8 @@ namespace Merusenne.Player.InputImpls
             //OnDestroy時にDispose()されるように登録
             _axisH.AddTo(this);
             _jump.AddTo(this);
-            _upSwitch.AddTo(this);
+            _leftSwitch.AddTo(this);
+            _rightSwitch.AddTo(this);
             _shot.AddTo(this);
             _throughFloor.AddTo(this);
         }
@@ -34,10 +37,11 @@ namespace Merusenne.Player.InputImpls
         {
             //入力のチェック
             _axisH.Value = Input.GetAxisRaw("Horizontal");
-            _jump.Value = Input.GetButtonDown("Jump");
-            _upSwitch.Value = Input.GetKeyDown(KeyCode.Tab);
-            _shot.Value = Input.GetButtonDown("Fire1");
-            _throughFloor.Value = Input.GetKey(KeyCode.DownArrow);
+            _jump.Value = Input.GetKeyDown(KeyCode.W);
+            _leftSwitch.Value = Input.GetKeyDown(KeyCode.LeftShift);
+            _rightSwitch.Value = Input.GetKeyDown(KeyCode.RightShift);
+            _shot.Value = Input.GetKeyDown(KeyCode.Return);
+            _throughFloor.Value = Input.GetKey(KeyCode.S);
         }
 
     }

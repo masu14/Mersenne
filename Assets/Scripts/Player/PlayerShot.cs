@@ -58,9 +58,18 @@ namespace Merusenne.Player
 
             }
 
+            //左シフトキーのショット切り替え　blue=0, green=1, red=2
+            if (_inputEventProvider.IsLeftSwitch.Value)
+            {
+                _shotSwitch.Value--;
+                if(_shotSwitch.Value < 0)
+                {
+                    _shotSwitch.Value = 2;
+                }
+            }
 
-            //ショット切り替え　blue=0, green=1, red=2
-            if (_inputEventProvider.IsUpSwitch.Value)
+            //右シフトキーのショット切り替え　blue=0, green=1, red=2
+            if (_inputEventProvider.IsRightSwitch.Value)
             {
                 //0=>1=>2=>0の順番で切り替わる
                 _shotSwitch.Value++;

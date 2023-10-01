@@ -12,7 +12,8 @@ namespace Merusenne.Player
 
         IReadOnlyReactiveProperty<float> AxisH { get; }         //水平方向の入力
         IReadOnlyReactiveProperty<bool> IsJump { get; }         //ジャンプの入力
-        IReadOnlyReactiveProperty<bool> IsUpSwitch { get; }     //ショット切り替えの入力
+        IReadOnlyReactiveProperty<bool> IsLeftSwitch { get; }     //ショット切り替えの入力
+        IReadOnlyReactiveProperty<bool> IsRightSwitch { get; }
         IReadOnlyReactiveProperty<bool> IsShot { get; }         //ショット発射の入力
         IReadOnlyReactiveProperty<bool> IsThrough { get; }      //すり抜け床を降りる入力
     }
