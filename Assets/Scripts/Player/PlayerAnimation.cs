@@ -7,13 +7,14 @@ namespace Merusenne.Player
     /// <summary>
     /// プレイヤーキャラのアニメーション処理を行うクラス
     /// アニメーターの実行タイミングを定義する
+    /// 入力やプレイヤーの状態に応じてアニメーションを切り替える
     /// </summary>
     public class PlayerAnimation : MonoBehaviour
     {
-        private Animator _animator;
-        private PlayerMove _playerMove;
-        private PlayerCore _playerCore;
-        private IInputEventProvider _inputEventProvider;
+        private Animator _animator;                             //プレイヤーのAnimatorを制御する
+        private PlayerMove _playerMove;                         //プレイヤーの動きを制御する
+        private PlayerCore _playerCore;                         //プレイヤーがDead状態になったときに使用する
+        private IInputEventProvider _inputEventProvider;        //入力を取得する、入力に応じてモーションを切り替える
 
         //各種アニメーションの紐づけ
         private string _stopAnime = "PlayerStop";   //静止モーション(未入力時)

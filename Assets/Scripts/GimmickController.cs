@@ -10,7 +10,7 @@ using UnityEngine.Rendering.Universal;
 /// </summary>
 public class GimmickController : MonoBehaviour
 {
-    [SerializeField] private Light2D pointLight;                //子オブジェクトのGimmickLight
+    [SerializeField] private Light2D _point_light;                //子オブジェクトのGimmickLight
         
     private Color32 _blue = new Color32(127, 255, 255, 255);    //青色
     private Color32 _green = new Color32(56, 241, 104, 255);    //緑色
@@ -18,7 +18,8 @@ public class GimmickController : MonoBehaviour
     private Color32 _clear = Color.clear;                       //無色
     private float _time = 0f;
 
-    [SerializeField] float _flashSpeed = 2.0f;
+    //パラメータ
+    [SerializeField] float _flash_speed = 2.0f;                 //点滅周期
 
     //UniRxのSubjectを定義
     private Subject<Color32> _collisionColor = new Subject<Color32>();
@@ -31,7 +32,7 @@ public class GimmickController : MonoBehaviour
     private void Update()
     {
         _time += Time.deltaTime;
-        pointLight.intensity = Mathf.Sin(_time* _flashSpeed);
+        _point_light.intensity = Mathf.Sin(_time* _flash_speed);
     }
 
     //ショットと衝突したときにギミック作動
@@ -45,7 +46,7 @@ public class GimmickController : MonoBehaviour
         {
             Color32 collisionColor = GetShotColor(shotTag);     //色を取得
 
-            pointLight.color = collisionColor;                  //取得した色に発光
+            _point_light.color = collisionColor;                  //取得した色に発光
             _collisionColor.OnNext(collisionColor);             //色を送信
             _collisionObject.OnNext(collision.gameObject);      //衝突したショットを送信
         }

@@ -16,7 +16,7 @@ public class ThroughFloorController : MonoBehaviour
 
     private IDisposable _isDown;                            //下向き入力の購読
     private bool _canThroughDown = false;                   //下向き入力長押しですり抜けフラグ
-    [SerializeField] private float _throughBorder = 0.2f;   //長押しの閾値 
+    [SerializeField] private float _through_border = 0.2f;   //長押しの閾値 
     void Start()
     {
         _myCollider = GetComponent<BoxCollider2D>();                            //すり抜け床のコライダー取得
@@ -27,7 +27,7 @@ public class ThroughFloorController : MonoBehaviour
 
         //下向き入力を長押しで購読する
         _isDown = _inputEventProvider.IsThrough
-            .Throttle(TimeSpan.FromSeconds(_throughBorder))
+            .Throttle(TimeSpan.FromSeconds(_through_border))
             .Subscribe(x => _canThroughDown = x)
             .AddTo(this);
 

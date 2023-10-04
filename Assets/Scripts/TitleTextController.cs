@@ -8,23 +8,23 @@ using System;
 
 public class TitleTextController : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI _titleText;
-    [SerializeField] [Range(0.1f, 10.0f)] float duration = 1.0f;
-    [SerializeField] private Color32 _startColor = new Color32(255, 255, 255, 255);
-    [SerializeField] private Color32 _endColor = new Color32(255, 255, 255, 0);
+    [SerializeField] private TextMeshProUGUI _title_text;
+    [SerializeField] [Range(0.1f, 10.0f)] float _duration = 1.0f;
+    [SerializeField] private Color32 _start_color = new Color32(255, 255, 255, 255);
+    [SerializeField] private Color32 _end_color = new Color32(255, 255, 255, 0);
     private float _time = 0;
     private string _sceneName = "StageScene";                               //ロードするシーン名
 
-    [SerializeField] private float _startWaitTime = 2.0f;
+    [SerializeField] private float _start_wait_time = 2.0f;
 
     void Update()
     {
         _time += Time.deltaTime;
-        _titleText.color = Color.Lerp(_startColor, _endColor, Mathf.PingPong(_time / duration, 1.0f)); 
+        _title_text.color = Color.Lerp(_start_color, _end_color, Mathf.PingPong(_time / _duration, 1.0f)); 
 
         if(Input.anyKeyDown)
         {
-            duration = 0.01f;
+            _duration = 0.01f;
             Debug.Log("pressanybutton");
             WaitGameStart();
         }
@@ -34,7 +34,7 @@ public class TitleTextController : MonoBehaviour
     {
         Debug.Log("waitgamestart");
        
-        Observable.Timer(TimeSpan.FromSeconds(_startWaitTime)).Subscribe(_ => GameStart());
+        Observable.Timer(TimeSpan.FromSeconds(_start_wait_time)).Subscribe(_ => GameStart());
     }
 
     private void GameStart()

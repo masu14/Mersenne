@@ -11,8 +11,8 @@ public class ShotController : MonoBehaviour
     private PlayerMove _playerMove;
     
     //パラメータ
-    [SerializeField] private float shotSpeed = 0.02f;   //解除コードの速さ
-    [SerializeField] private float shotTime = 1.0f;     //解除コードの消滅までの時間
+    [SerializeField] private float _shot_speed = 0.02f;   //解除コードの速さ
+    [SerializeField] private float _shot_time = 1.0f;     //解除コードの消滅までの時間
 
 
     private bool _isWrite = true;                       //一度だけ書き換え可能なフラグ
@@ -45,15 +45,15 @@ public class ShotController : MonoBehaviour
         
         if (_shotxDir == true)                //スプライトが右向きのとき
         {
-            ShotMove(shotSpeed);
+            ShotMove(_shot_speed);
         }
         else                                  //スプライトが左向きのとき
         {
-            ShotMove(-shotSpeed);
+            ShotMove(-_shot_speed);
         }
 
         //生成から一定時間経過後ショット消滅
-        Destroy(gameObject, shotTime);        
+        Destroy(gameObject, _shot_time);        
     }
 
     //ショットの速度の更新

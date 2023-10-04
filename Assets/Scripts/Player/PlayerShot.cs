@@ -14,12 +14,12 @@ namespace Merusenne.Player
         private IInputEventProvider _inputEventProvider;
 
         //パラメータ
-        [SerializeField] private float _goShotTime = 1.5f;                          //ショット待機時間
+        [SerializeField] private float _go_shot_time = 1.5f;                          //ショット待機時間
 
         //Prefabの登録
-        [SerializeField] private ShotController _shotBluePrefab;                    //青ショット
-        [SerializeField] private ShotController _shotGreenPrefab;                   //緑ショット
-        [SerializeField] private ShotController _shotRedPrefab;                     //赤ショット
+        [SerializeField] private ShotController _shot_blue_prefab;                    //青ショット
+        [SerializeField] private ShotController _shot_green_prefab;                   //緑ショット
+        [SerializeField] private ShotController _shot_red_prefab;                     //赤ショット
        
         private Vector3 _shotPoint;                                                 //ショットが生成される位置
         private bool _goShot = false;                                               //ショットフラグ
@@ -84,7 +84,7 @@ namespace Merusenne.Player
             {
                 Shot();
                 _goShot = false;
-                Observable.Timer(TimeSpan.FromSeconds(_goShotTime)).Subscribe(_ => GoShot());
+                Observable.Timer(TimeSpan.FromSeconds(_go_shot_time)).Subscribe(_ => GoShot());
             }
         }
 
@@ -97,13 +97,13 @@ namespace Merusenne.Player
             switch (_shotSwitch.Value)
             {
                 case 0: //青ショット
-                    shotPrefab = _shotBluePrefab;
+                    shotPrefab = _shot_blue_prefab;
                     break;
                 case 1: //緑ショット
-                    shotPrefab = _shotGreenPrefab;
+                    shotPrefab = _shot_green_prefab;
                     break;
                 case 2: //赤ショット
-                    shotPrefab = _shotRedPrefab;
+                    shotPrefab = _shot_red_prefab;
                     break;
             }
 

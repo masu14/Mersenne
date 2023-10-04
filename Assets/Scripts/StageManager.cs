@@ -4,9 +4,9 @@ using System;
 
 public class StageManager : MonoBehaviour
 {
-    private Subject<Vector2> playerEnter = new Subject<Vector2>();
+    private Subject<Vector2> _playerEnter = new Subject<Vector2>();
 
-    public IObservable<Vector2> OnPlayerEnter => playerEnter;
+    public IObservable<Vector2> OnPlayerEnter => _playerEnter;
 
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -14,7 +14,7 @@ public class StageManager : MonoBehaviour
         //プレイヤーを検知したときnowStageを更新
         if(collision.gameObject.tag == "Player")
         {
-            playerEnter.OnNext(transform.position);
+            _playerEnter.OnNext(transform.position);
         }
     }
 }

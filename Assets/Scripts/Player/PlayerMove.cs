@@ -15,14 +15,14 @@ namespace Merusenne.Player
         private IInputEventProvider _inputEventProvider;
 
         //プレイヤーの移動のパラメータ
-        [SerializeField] private float _xDashSpeed = 3.0f;                  //地上での速さ
-        [SerializeField] private float _xFriSpeed = 2.5f; 　　              //空中での速さ
-        [SerializeField] private float _jumpPower = 14;                      //ジャンプ力
-        [SerializeField] private float _maxJumpSpeed = 14;                  //ジャンプ速度の最大値
-        [SerializeField] private float _maxFallSpeed = 14;                  //落下速度の最大値
-        [SerializeField] private float _deadJump = 10f;                     //dead時演出のジャンプ
-        [SerializeField] private LayerMask _groundLayer;                    //地面レイヤー指定
-        [SerializeField] private AnimationCurve _speedCurve;                //横移動の速度のグラフ
+        [SerializeField] private float _x_dash_speed = 3.0f;                  //地上での速さ
+        [SerializeField] private float _x_fri_speed = 2.5f; 　　              //空中での速さ
+        [SerializeField] private float _jump_power = 14;                      //ジャンプ力
+        [SerializeField] private float _max_jump_speed = 14;                  //ジャンプ速度の最大値
+        [SerializeField] private float _max_fall_speed = 14;                  //落下速度の最大値
+        [SerializeField] private float _dead_jump = 10f;                     //dead時演出のジャンプ
+        [SerializeField] private LayerMask _ground_layer;                    //地面レイヤー指定
+        [SerializeField] private AnimationCurve _speed_curve;                //横移動の速度のグラフ
 
         
 
@@ -96,12 +96,12 @@ namespace Merusenne.Player
             if (_inputEventProvider.AxisH.Value != 0 && _onGround) //横入力有＆地上
             {
                 _dashTime += Time.deltaTime;
-                _rbody.velocity = new Vector2(_xDashSpeed * _inputEventProvider.AxisH.Value * _speedCurve.Evaluate(_dashTime), _rbody.velocity.y);
+                _rbody.velocity = new Vector2(_x_dash_speed * _inputEventProvider.AxisH.Value * _speed_curve.Evaluate(_dashTime), _rbody.velocity.y);
             }
             else if(_inputEventProvider.AxisH.Value != 0 && _onGround == false) //横入力有＆空中
             {
                 _dashTime += Time.deltaTime;
-                _rbody.velocity = new Vector2(_xFriSpeed * _inputEventProvider.AxisH.Value * _speedCurve.Evaluate(_dashTime), _rbody.velocity.y);
+                _rbody.velocity = new Vector2(_x_fri_speed * _inputEventProvider.AxisH.Value * _speed_curve.Evaluate(_dashTime), _rbody.velocity.y);
             }
             else if(_inputEventProvider.AxisH.Value ==0)　//横入力無
             {
@@ -128,20 +128,20 @@ namespace Merusenne.Player
             {
                 _isJump = false;
                 //Debug.Log("ジャンプ");
-                _rbody.AddForce(new Vector2(0, _jumpPower), ForceMode2D.Impulse);//ジャンプ速度の制限
+                _rbody.AddForce(new Vector2(0, _jump_power), ForceMode2D.Impulse);//ジャンプ速度の制限
                 
             }
 
             //ジャンプの最大速度
-            if (_rbody.velocity.y > _maxJumpSpeed)
+            if (_rbody.velocity.y > _max_jump_speed)
             {
-                _rbody.velocity = new Vector2(_rbody.velocity.x, _maxJumpSpeed);
+                _rbody.velocity = new Vector2(_rbody.velocity.x, _max_jump_speed);
             }
 
             //落下速度の最大速度
-            if(_rbody.velocity.y < - _maxFallSpeed)
+            if(_rbody.velocity.y < - _max_fall_speed)
             {
-                _rbody.velocity = new Vector2(_rbody.velocity.x, -_maxFallSpeed);
+                _rbody.velocity = new Vector2(_rbody.velocity.x, -_max_fall_speed);
 
             }
 
@@ -153,9 +153,9 @@ namespace Merusenne.Player
         private bool ChecKGround()
         {
             //足元の中心、右端、左端のいずれかが地面に触れているならフラグを立てる
-            bool isGround = Physics2D.Linecast(transform.position + _playerWide, transform.position + _playerWide - transform.up * 0.1f, _groundLayer) ||
-                            Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _groundLayer) ||
-                            Physics2D.Linecast(transform.position - _playerWide, transform.position - _playerWide - transform.up * 0.1f, _groundLayer);
+            bool isGround = Physics2D.Linecast(transform.position + _playerWide, transform.position + _playerWide - transform.up * 0.1f, _ground_layer) ||
+                            Physics2D.Linecast(transform.position, transform.position - transform.up * 0.1f, _ground_layer) ||
+                            Physics2D.Linecast(transform.position - _playerWide, transform.position - _playerWide - transform.up * 0.1f, _ground_layer);
 
             _onGround = isGround;
             IsGrounded.Value = _onGround;
@@ -168,7 +168,7 @@ namespace Merusenne.Player
         {
             GetComponent<EdgeCollider2D>().enabled = false;
             _rbody.velocity = Vector2.zero;
-            _rbody.velocity = new Vector2(0, _deadJump);
+            _rbody.velocity = new Vector2(0, _dead_jump);
         }
     }
 

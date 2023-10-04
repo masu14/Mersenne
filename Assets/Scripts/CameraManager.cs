@@ -18,9 +18,9 @@ using UniRx;
 public class CameraManager : MonoBehaviour
 {
     
-    private const int cameraWidth = 18;                     //画面横幅
-    private const int cameraHeight = 10;                    //画面縦幅
-    private float edgeRight, edgeLeft, edgeUp, edgeDown;    //カメラに映る端の座標成分                                   
+    private const int _CAMERAWIDE = 18;                     //画面横幅
+    private const int _CAMERAHEIGHT = 10;                    //画面縦幅
+    private float _edgeRight, _edgeLeft, _edgeUp, _edgeDown;    //カメラに映る端の座標成分                                   
 
     private Vector2 _nowStage;                              //プレイヤーがいるステージ
 
@@ -62,27 +62,27 @@ public class CameraManager : MonoBehaviour
     //  カメラ処理のメソッド
     private void UpdateCameraPos(Vector2 nowStagePos)
     {
-        edgeLeft = nowStagePos.x - cameraWidth / 2;
-        edgeRight = nowStagePos.x + cameraWidth / 2;
-        edgeUp = nowStagePos.y + cameraHeight / 2;
-        edgeDown = nowStagePos.y - cameraHeight / 2;
+        _edgeLeft = nowStagePos.x - _CAMERAWIDE / 2;
+        _edgeRight = nowStagePos.x + _CAMERAWIDE / 2;
+        _edgeUp = nowStagePos.y + _CAMERAHEIGHT / 2;
+        _edgeDown = nowStagePos.y - _CAMERAHEIGHT / 2;
 
-        if(edgeLeft >= transform.position.x)
+        if(_edgeLeft >= transform.position.x)
         {
-            transform.position += cameraWidth * Vector3.right;
+            transform.position += _CAMERAWIDE * Vector3.right;
         }
-        else if(edgeRight <= transform.position.x)
+        else if(_edgeRight <= transform.position.x)
         {
-            transform.position -= cameraWidth * Vector3.right;
+            transform.position -= _CAMERAWIDE * Vector3.right;
         }
 
-        if(edgeDown >= transform.position.y)
+        if(_edgeDown >= transform.position.y)
         {
-            transform.position += cameraHeight * Vector3.up;
+            transform.position += _CAMERAHEIGHT * Vector3.up;
         }
-        else if (edgeUp <= transform.position.y)
+        else if (_edgeUp <= transform.position.y)
         {
-            transform.position -= cameraHeight * Vector3.up;
+            transform.position -= _CAMERAHEIGHT * Vector3.up;
         }
     
     }
@@ -92,28 +92,28 @@ public class CameraManager : MonoBehaviour
     
     void Update()
     {
-        edgeLeft = _nowStage.x - cameraWidth / 2;
-        edgeRight = _nowStage.x + cameraWidth / 2;
-        edgeUp = _nowStage.y + cameraHeight / 2;
-        edgeDown = _nowStage.y - cameraHeight / 2;
+        _edgeLeft = _nowStage.x - _CAMERAWIDE / 2;
+        _edgeRight = _nowStage.x + _CAMERAWIDE / 2;
+        _edgeUp = _nowStage.y + _CAMERAHEIGHT / 2;
+        _edgeDown = _nowStage.y - _CAMERAHEIGHT / 2;
 
         //カメラ更新
-        if (edgeLeft >= transform.position.x)
+        if (_edgeLeft >= transform.position.x)
         {
-            transform.position += cameraWidth * Vector3.right;
+            transform.position += _CAMERAWIDE * Vector3.right;
         }
-        else if (edgeRight <= transform.position.x)
+        else if (_edgeRight <= transform.position.x)
         {
-            transform.position -= cameraWidth * Vector3.right;
+            transform.position -= _CAMERAWIDE * Vector3.right;
         }
 
-        if(edgeDown >= transform.position.y)
+        if(_edgeDown >= transform.position.y)
         {
-            transform.position += cameraHeight * Vector3.up;
+            transform.position += _CAMERAHEIGHT * Vector3.up;
         }
-        else if (edgeUp <= transform.position.y)
+        else if (_edgeUp <= transform.position.y)
         {
-            transform.position -= cameraHeight * Vector3.up;
+            transform.position -= _CAMERAHEIGHT * Vector3.up;
         }
     }
     
