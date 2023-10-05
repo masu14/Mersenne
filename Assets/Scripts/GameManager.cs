@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour
     private SaveDataManager _save;
     
     //パラメータ
-    [SerializeField] private float _loadWaitTime = 2.0f;                    //プレイヤーがDeadしてからロードされるまでの時間
+    [SerializeField] private float _load_wait_time = 2.0f;                    //プレイヤーがDeadしてからロードされるまでの時間
 
     private string _sceneName = "StageScene";                               //ロードするシーン名
     private string _filePath;                                               //セーブデータの保存先
@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
                     _save._nowSavePos = x;
 
                     Debug.Log($"セーブポイントの位置を変更しました:{x}");
+                    Save();
                 })
                 .AddTo(this);
 
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
                 {
                     _save._nowStagePos = x;
                     Debug.Log($"セーブポイントのあるステージの位置を変更しました{x}");
+                    Save();
                 })
                 .AddTo(this);
         }
@@ -112,13 +114,13 @@ public class GameManager : MonoBehaviour
     //プレイヤーDead時に一定時間待つ
     void WaitGameRestart()
     {
-        Observable.Timer(TimeSpan.FromSeconds(_loadWaitTime)).Subscribe(_ => GameRestart());
+        Observable.Timer(TimeSpan.FromSeconds(_load_wait_time)).Subscribe(_ => GameRestart());
     }
 
     //プレイヤーDead時に一定時間経過後、セーブデータをセーブした後リロードする
     private void GameRestart()
     {
-        Save();
+        
         SceneManager.LoadScene(_sceneName);
     }
 

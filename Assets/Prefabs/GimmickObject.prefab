@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c99605efc1e8a34ca04c0d5f2e31fc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointLight: {fileID: 1553713752058941003}
-  _flashSpeed: 4
+  _point_light: {fileID: 1553713752058941003}
+  _flash_speed: 2
 --- !u!61 &1553713751919469557
 BoxCollider2D:
   m_ObjectHideFlags: 0

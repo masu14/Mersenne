@@ -19,6 +19,7 @@ TagManager:
   - SaveDataManager
   - SavePoint
   - GameManager
+  - Goal
   layers:
   - Default
   - TransparentFX

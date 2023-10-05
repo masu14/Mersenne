@@ -451,15 +451,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 041cdb6d52c3ffb4d9968365f6b7a9a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _titleText: {fileID: 1627094721}
-  duration: 1.5
-  _startColor:
+  _title_text: {fileID: 1627094721}
+  _duration: 1
+  _start_color:
     serializedVersion: 2
-    rgba: 4291348680
-  _endColor:
+    rgba: 4294967295
+  _end_color:
     serializedVersion: 2
-    rgba: 852019400
-  _startWaitTime: 1.5
+    rgba: 16777215
+  _start_wait_time: 2
 --- !u!114 &1627094721
 MonoBehaviour:
   m_ObjectHideFlags: 0
