@@ -5,13 +5,18 @@ using UniRx;
 
 
 /// <summary>
+/// 
 /// ThroughFroor(すり抜け床)を制御するクラス
+/// すり抜け床がプレイヤーのy座標(足元)よりも高い位置にあるときコライダーが無効になる
+/// プレイヤーがすり抜け床の上に乗っているときは、下向き入力を長押しすることでコライダーが無効になる
+/// 
 /// </summary>
+/// 
 public class ThroughFloorController : MonoBehaviour
 {
-    private BoxCollider2D _myCollider;
-    private GameObject _player;
-    private InputEventProviderImpl _inputEventProvider;
+    private BoxCollider2D _myCollider;                      //コライダーを切り替えることですり抜けを行う
+    private GameObject _player;                             //プレイヤーのy座標をコライダーの切り替えの条件に使用する
+    private InputEventProviderImpl _inputEventProvider;     //プレイヤーの下向き入力をコライダーの切り替えの条件に使用する
     
 
     private IDisposable _isDown;                            //下向き入力の購読
@@ -39,11 +44,11 @@ public class ThroughFloorController : MonoBehaviour
         //2つ目の条件はプレイヤーが床にめり込むのを避けるため
         if(_canThroughDown ||(_player.transform.position.y < transform.position.y))
         {
-            _myCollider.enabled = false;
+            _myCollider.enabled = false;    //無効化
         }
         else
         {
-            _myCollider.enabled = true;
+            _myCollider.enabled = true;     //有効化
         }
     }
 
