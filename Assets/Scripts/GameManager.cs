@@ -12,16 +12,21 @@ public class GameManager : MonoBehaviour
 {
     private GameObject _player;
     private PlayerCore _playerCore;
+
     private SavePointController[] _savePoints;
     private SaveDataManager _save;
+
+    private GameObject _clearText;
+    private ClearTextController _clearTextController;
     
     //パラメータ
     [SerializeField] private float _load_wait_time = 2.0f;                    //プレイヤーがDeadしてからロードされるまでの時間
 
     private string _sceneName = "StageScene";                               //ロードするシーン名
     private string _filePath;                                               //セーブデータの保存先
-    private Vector2 _playerStartPos = new Vector2(-5, 0);                   //セーブデータがないときのプレイヤーの開始位置
+    private Vector2 _playerStartPos = new Vector2(-5.5f, -4);                   //セーブデータがないときのプレイヤーの開始位置
     private Vector2 _playerPosUp = new Vector2(0, 0.5f);                       //セーブポイント上空のプレイヤーの開始出現位置
+    private bool _isClear = false;
 
     private Subject<Vector2> _saveStage = new Subject<Vector2>();
     public IObservable<Vector2> OnSaveStage => _saveStage;
@@ -32,8 +37,10 @@ public class GameManager : MonoBehaviour
         _filePath = Application.dataPath + "/.savedata.json";               //セーブデータの保存先登録
         _save = new SaveDataManager();                                      //セーブデータの管理先取得
         _savePoints = FindObjectsOfType<SavePointController>();             //シーン上の全てセーブポイントを取得
+        _clearText = GameObject.FindWithTag("ClearText");
+        _clearTextController = _clearText.GetComponent<ClearTextController>();
 
-        
+        _sceneName = "StageScene";
        
         Debug.Log($"ロード時のnowStagePos:{_save._nowStagePos}");
 
@@ -67,6 +74,10 @@ public class GameManager : MonoBehaviour
                 .AddTo(this);
         }
 
+        _clearTextController.OnClear
+            .Subscribe(_ => _isClear = true)
+            .AddTo(this);
+
         //セーブデータのロード
         Load();
         _saveStage.OnNext(_save._nowStagePos);                              //ロード時のステージの送信、CameraManagerが購読
@@ -79,6 +90,21 @@ public class GameManager : MonoBehaviour
         _player.transform.position = _save._nowSavePos + _playerPosUp;      //ロード時のプレイヤーの開始位置
 
     }
+
+    private void Update()
+    {
+        if (_isClear)
+        {
+            if (Input.anyKeyDown)
+            {
+                _sceneName = "TitleScene";
+                _save._nowSavePos = _playerStartPos;
+                Save();
+                SceneManager.LoadScene(_sceneName);
+            }
+        }
+    }
+
     //セーブデータを更新しセーブする
     public void Save()
     {

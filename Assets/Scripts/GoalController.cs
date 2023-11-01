@@ -11,18 +11,20 @@ public class GoalController : MonoBehaviour
     [SerializeField] private float _duration = 1.0f;
     [SerializeField] private float _max_intensity = 2.0f;
     [SerializeField] private float _min_intensity = 0.2f;
+
+    private bool _isGoal = false;
     private float _time = 0.0f;
 
     private Subject<Unit> _onGoal = new Subject<Unit>();
     public IObservable<Unit> OnGoal => _onGoal;
 
-    // Start is called before the first frame update
     void Start()
     {
+        _isGoal = false;
         _onGoal.AddTo(this);   
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         _time += Time.deltaTime;
@@ -32,8 +34,11 @@ public class GoalController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+
         if (collision.tag == "Player")
         {
+            if (_isGoal) return;
+            _isGoal = true;
             _onGoal.OnNext(Unit.Default);
             Debug.Log("Goal");
         }

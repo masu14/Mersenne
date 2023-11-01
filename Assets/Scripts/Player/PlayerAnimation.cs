@@ -16,6 +16,8 @@ namespace Merusenne.Player
         private PlayerCore _playerCore;                         //プレイヤーがDead状態になったときに使用する
         private IInputEventProvider _inputEventProvider;        //入力を取得する、入力に応じてモーションを切り替える
 
+        private bool _isClear = false;
+
         //各種アニメーションの紐づけ
         private string _stopAnime = "PlayerStop";   //静止モーション(未入力時)
         private string _moveAnime = "PlayerMove";   //地上移動モーション(地上で横入力)
@@ -43,9 +45,12 @@ namespace Merusenne.Player
             //アニメーションの初期化
             _nowAnime = _stopAnime;
             _oldAnime = _stopAnime;
+
+            _isClear = false;
         }
         void Update()
         {
+            if (_isClear) return;
             //プレイヤーがDead時には処理を行わない
             if (_playerCore.IsDead.Value) return;
             
@@ -89,6 +94,14 @@ namespace Merusenne.Player
 
         }
 
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.tag == "Goal")
+            {
+                _isClear = true;
+                _animator.Play(_stopAnime);
+            }
+        }
 
         //プレイヤーがDeadしたときにDeadモーションを行う
         private void Dead()

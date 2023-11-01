@@ -29,6 +29,7 @@ namespace Merusenne.Player
         //フラグ
         private bool _isJump = false;                           //ジャンプフラグ
         private bool _onGround = false;                         //接地フラグ
+        private bool _isClear = false;
         
         
         private float _dashTime;                                //_speedCurveの定義域
@@ -56,14 +57,24 @@ namespace Merusenne.Player
             _playerCore = GetComponent<PlayerCore>();                   //プレイヤーの状態取得(Deadフラグ)
             _inputEventProvider = GetComponent<IInputEventProvider>();  //プレイヤーの入力取得
 
+            
+
             //OnDestroy時にDispose()されるように登録
             _isGrounded.AddTo(this);
             _playerCore.OnDead.Subscribe(_ => DeadMove()).AddTo(this);
         }
 
+        private void Start()
+        {
+            _isClear = false;
+            Debug.Log(_isClear);
+        }
+
         //入力の送信の検知はUpdateで処理する
         void Update()
         {
+
+            if (_isClear) return;
             //Deadフラグが立ったら処理を行わない
             if (_playerCore.IsDead.Value) return;
 
@@ -86,6 +97,7 @@ namespace Merusenne.Player
 
         private void FixedUpdate()
         {
+            if (_isClear) return;
             //Deadフラグが立ったら処理を行わない
             if (_playerCore.IsDead.Value) return;
 
@@ -169,6 +181,17 @@ namespace Merusenne.Player
             GetComponent<EdgeCollider2D>().enabled = false;
             _rbody.velocity = Vector2.zero;
             _rbody.velocity = new Vector2(0, _dead_jump);
+        }
+
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (collision.gameObject.tag == "Goal")
+            {
+                _isClear = true;
+                _rbody.velocity = Vector2.zero;
+                Debug.Log("Goal");
+            }
         }
     }
 

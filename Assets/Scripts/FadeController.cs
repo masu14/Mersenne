@@ -36,7 +36,7 @@ public class FadeController : MonoBehaviour
 
             //Goalオブジェクトに接触した際にFadeOut()の処理を実行
             _goalController.OnGoal
-           .Subscribe(_ => FadeOut())
+           .Subscribe(_ => StartFadeOut())
            .AddTo(this);
         }
 
@@ -50,6 +50,11 @@ public class FadeController : MonoBehaviour
     void Start()
     {
         StartCoroutine(FadeIn());       //シーンロード時にフェードインが入る
+    }
+
+    private void StartFadeOut()
+    {
+        StartCoroutine(FadeOut());
     }
 
     //暗い画面から徐々にアルファ値を下げ透明にする
@@ -71,7 +76,7 @@ public class FadeController : MonoBehaviour
     }
 
     //Goalオブジェクトに触れたら呼び出され、画面が徐々に白くなる
-    private void FadeOut()
+    private IEnumerator FadeOut()
     {
         Debug.Log("FadeOut");
         var timer = 0.0f;
@@ -82,10 +87,12 @@ public class FadeController : MonoBehaviour
         while(timer<_fade_out_time)
         {
             timer += Time.deltaTime;
-            float alpha = Mathf.Lerp(_startOutColor.a, _endOutColor.a, timer / _fade_out_time);
+            float alpha = timer / _fade_out_time;
             Color newColor = _startOutColor;
             newColor.a = alpha;
             _fade.color = newColor;
+
+            yield return null;
 
         }
     }

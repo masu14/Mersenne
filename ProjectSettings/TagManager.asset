@@ -20,6 +20,7 @@ TagManager:
   - SavePoint
   - GameManager
   - Goal
+  - ClearText
   layers:
   - Default
   - TransparentFX
