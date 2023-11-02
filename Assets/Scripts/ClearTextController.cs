@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using TMPro;
 using System;
+using Merusenne.StageGimmick;
 
 public class ClearTextController : MonoBehaviour
 {

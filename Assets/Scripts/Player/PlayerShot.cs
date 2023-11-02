@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using UniRx;
+using Merusenne.Player.Shot;
+
 
 
 namespace Merusenne.Player

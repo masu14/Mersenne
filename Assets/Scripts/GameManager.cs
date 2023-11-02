@@ -3,6 +3,7 @@ using UniRx;
 using UnityEngine.SceneManagement;
 using System;
 using System.IO;
+using Merusenne.StageGimmick;
 
 /// <summary>
 /// ゲーム全体の管理を行うクラス

@@ -3,6 +3,7 @@ using UnityEngine;
 using UniRx;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Merusenne.StageGimmick;
 
 /// <summary>
 /// 
