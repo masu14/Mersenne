@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using UniRx;
 
 public class PopUpController : MonoBehaviour

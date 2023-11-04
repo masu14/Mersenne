@@ -1,17 +1,14 @@
 using UnityEngine;
-using System.Collections;
 using UniRx;
-using UniRx.Triggers;
-using UnityEngine.Events;
 using System;
 
 [Serializable]
 public class PopUpScaleController
 {
-    public Vector3 from, to;
-    public float duration;
-    public AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
-    public UnityEvent onBegin, onEnd;
+    [SerializeField] Vector2 from, to;
+    [SerializeField] float duration;
+    [SerializeField] AnimationCurve curve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
+    
     private GameObject target;
 
     private Subject<Unit> scaleStartStream = new Subject<Unit>();
@@ -25,16 +22,15 @@ public class PopUpScaleController
     public void Setup(GameObject t)
     {
         target = t;
-        scaleStartAsObservable.Subscribe(_ => onBegin.Invoke());
-        scaleEndAsObservable.Subscribe(_ => onEnd.Invoke());
-        scaleEndAsObservable.Subscribe(_ => target.transform.localScale = Vector3.Lerp(from, to, curve.Evaluate(1.0F)));
+        
+        scaleEndAsObservable.Subscribe(_ => target.transform.localScale = Vector2.Lerp(from, to, curve.Evaluate(1.0F)));
     }
 
     public void Play()
     {
         scaleStartStream.OnNext(Unit.Default);
         Observable.EveryFixedUpdate()
-            .Take(System.TimeSpan.FromSeconds(duration))
+            .Take(TimeSpan.FromSeconds(duration))
             .Select(_ => Time.fixedDeltaTime)
             .Scan((acc, current) => acc + current)
             .Subscribe(time => {

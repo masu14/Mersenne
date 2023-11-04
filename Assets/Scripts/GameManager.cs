@@ -19,15 +19,20 @@ public class GameManager : MonoBehaviour
 
     private GameObject _clearText;
     private ClearTextController _clearTextController;
+
+    [SerializeField] GameObject _tutorial_action;
     
     //パラメータ
-    [SerializeField] private float _load_wait_time = 2.0f;                    //プレイヤーがDeadしてからロードされるまでの時間
+    [SerializeField] private float _load_wait_time = 2.0f;                  //プレイヤーがDeadしてからロードされるまでの時間
+    [SerializeField] private float _pop_up_wait_time = 0.5f;                //ゲーム開始からチュートリアル表示までの時間
 
     private string _sceneName = "StageScene";                               //ロードするシーン名
     private string _filePath;                                               //セーブデータの保存先
     private Vector2 _playerStartPos = new Vector2(-5.5f, -4);                   //セーブデータがないときのプレイヤーの開始位置
     private Vector2 _playerPosUp = new Vector2(0, 0.5f);                       //セーブポイント上空のプレイヤーの開始出現位置
     private bool _isClear = false;
+    private bool _isTutorial = false;                                       //チュートリアルが開いている状態
+    
 
     private Subject<Vector2> _saveStage = new Subject<Vector2>();
     public IObservable<Vector2> OnSaveStage => _saveStage;
@@ -90,6 +95,19 @@ public class GameManager : MonoBehaviour
        
         _player.transform.position = _save._nowSavePos + _playerPosUp;      //ロード時のプレイヤーの開始位置
 
+        if (!_save._isFisrtPlay)
+        {
+            _save._isFisrtPlay = true;
+            Observable.Timer(TimeSpan.FromSeconds(_pop_up_wait_time))
+                .Subscribe(_ =>
+                {
+                    _isTutorial = true;
+                    _tutorial_action.GetComponent<PopUpController>().Open();
+                    Debug.Log("ゲーム初プレイにつき、操作チュートリアルを表示します");
+                })
+                .AddTo(this);
+        }
+
     }
 
     private void Update()
@@ -102,6 +120,15 @@ public class GameManager : MonoBehaviour
                 _save._nowSavePos = _playerStartPos;
                 Save();
                 SceneManager.LoadScene(_sceneName);
+            }
+        }
+
+        if (_isTutorial)
+        {
+            if (Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.S)||Input.GetKeyDown(KeyCode.D))
+            {
+                _isTutorial = false;
+                _tutorial_action.GetComponent<PopUpController>().Close();
             }
         }
     }
