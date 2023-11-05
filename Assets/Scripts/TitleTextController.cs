@@ -6,6 +6,8 @@ using System;
 
 /// <summary>
 /// タイトル画面でのテキストの明暗、入力、ステージシーンへの遷移の処理を制御する
+/// 「Press Any Button」テキストは明暗を変化させて点滅させる。入力を加えると点滅のスピードが速くなり、一定時間
+/// 経過後ステージシーンへ遷移する。
 /// </summary>
 
 public class TitleTextController : MonoBehaviour
@@ -24,7 +26,7 @@ public class TitleTextController : MonoBehaviour
 
     void Update()
     {
-        _time += Time.deltaTime;                                                                                //時間パラメータを毎フレーム更新
+        _time += Time.deltaTime;                                                                                //時間パラメータを毎フレーム更新、点滅の時間変化に使う
         _title_text.color = Color.Lerp(_start_color, _end_color, Mathf.PingPong(_time / _duration, 1.0f));      //点滅処理
 
 
@@ -41,7 +43,7 @@ public class TitleTextController : MonoBehaviour
     private void WaitGameStart()
     {
         Debug.Log("waitgamestart");
-        Observable.Timer(TimeSpan.FromSeconds(_start_wait_time)).Subscribe(_ => GameStart());   //一定時間経過後GameStartへ
+        Observable.Timer(TimeSpan.FromSeconds(_start_wait_time)).Subscribe(_ => GameStart());   //_start_wait_time経過後GameStart()へ
     }
 
     //ステージシーンへの遷移

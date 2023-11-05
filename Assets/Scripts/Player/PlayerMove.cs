@@ -6,7 +6,7 @@ using UniRx;
 namespace Merusenne.Player
 {
     /// <summary>
-    /// プレイヤーの動きを制御するクラス
+    /// プレイヤーの動きを制御するスクリプトコンポーネント
     /// </summary>
     public sealed class PlayerMove : MonoBehaviour
     {
@@ -73,7 +73,7 @@ namespace Merusenne.Player
         //入力の送信の検知はUpdateで処理する
         void Update()
         {
-
+            //Clearフラグが立ったら処理を行わない
             if (_isClear) return;
             //Deadフラグが立ったら処理を行わない
             if (_playerCore.IsDead.Value) return;
@@ -81,11 +81,11 @@ namespace Merusenne.Player
             //向きの調整
             if (_inputEventProvider.AxisH.Value > _AXISHBORDER)
             {
-                _playerxDir.Value = true;
+                _playerxDir.Value = true;   //右向き
             }
             else if (_inputEventProvider.AxisH.Value < -_AXISHBORDER)
             {
-                _playerxDir.Value = false;
+                _playerxDir.Value = false;  //左向き
             }
 
             //地上でジャンプ入力を押したらジャンプフラグを立てる
@@ -97,6 +97,7 @@ namespace Merusenne.Player
 
         private void FixedUpdate()
         {
+            //Clearフラグが立ったら処理を行わない
             if (_isClear) return;
             //Deadフラグが立ったら処理を行わない
             if (_playerCore.IsDead.Value) return;
@@ -183,7 +184,7 @@ namespace Merusenne.Player
             _rbody.velocity = new Vector2(0, _dead_jump);
         }
 
-
+        //Goal時にプレイヤーを静止させる
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.tag == "Goal")

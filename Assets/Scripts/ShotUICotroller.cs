@@ -9,7 +9,7 @@ using Merusenne.Player;
 /// </summary>
 public class ShotUICotroller : MonoBehaviour
 {
-    private PlayerShot _playerShot;
+    private PlayerShot _playerShot;                                 //プレイヤーの選択中のショットの色を取得するために使う
 
     private int _shotColor =0;                                      //選択中のショットの色番号(blue=0,green=1,red=2)
     private Color32 _onColor = new Color32(255, 255, 255, 255);     //明るめ
@@ -19,7 +19,7 @@ public class ShotUICotroller : MonoBehaviour
         
         _playerShot = GameObject.FindWithTag("Player").GetComponent<PlayerShot>();  //プレイヤーのショット制御取得
 
-        //プレイヤーがショット切り替えを購読、ショットUI更新、OnDestroy時にDispose()されるように登録
+        //プレイヤーのショット切り替えを購読、ショットUI更新、OnDestroy時にDispose()されるように登録
         _playerShot.OnShotSwitch
             .Subscribe(x =>
             {

@@ -5,7 +5,7 @@ using UniRx;
 namespace Merusenne.Player.Shot
 {
     /// <summary>
-    /// ショット本体の制御を行うクラス
+    /// ショット本体の制御を行うスクリプトコンポーネント
     /// ShotxDirプロパティはショット発射後に移動方向を変化させないために必要
     /// </summary>
     public class ShotController : MonoBehaviour

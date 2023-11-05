@@ -3,7 +3,7 @@ using UniRx;
 using System;
 
 /// <summary>
-/// プレイヤーの状態を管理するクラス
+/// プレイヤーの状態を管理するスクリプトコンポーネント
 /// プレイヤーがDeadタグを持つオブジェクトに接触すると、Dead状態になる
 /// </summary>
 public class PlayerCore : MonoBehaviour

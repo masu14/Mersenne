@@ -6,7 +6,7 @@ using UnityEngine.Rendering.Universal;
 namespace Merusenne.StageGimmick.LuminaGimmick
 {
     /// <summary>
-    /// ステージ上の発光ギミックを制御するクラス
+    /// GimmickObjectの発光ギミックを制御するスクリプトコンポーネント
     /// gimmickObjectにプレイヤーのショットを当てるとギミックが作動
     /// ショットの衝突時にgimmickObjectの孫オブジェクトにあるLuminaBoard,Barrierにショットの色を送信する
     /// </summary>

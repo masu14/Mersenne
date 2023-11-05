@@ -11,16 +11,16 @@ using Merusenne.StageGimmick;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    private GameObject _player;
-    private PlayerCore _playerCore;
+    private GameObject _player;                                     //プレイヤーキャラの状態(Dead等)を取得するのに使う
+    private PlayerCore _playerCore;                                 //プレイヤー自身がDeadタグ付きオブジェクトに触れると状態が送信される
 
-    private SavePointController[] _savePoints;
-    private SaveDataManager _save;
+    private SavePointController[] _savePoints;                      //シーン上にある黄色い足場
+    private SaveDataManager _save;                                  //ゲーム全体でのセーブデータを書き込む(json形式)
 
-    private GameObject _clearText;
-    private ClearTextController _clearTextController;
+    private GameObject _clearText;                                  //ゲームクリア時に表示するテキストオブジェクト
+    private ClearTextController _clearTextController;               //_clearTextが表示されたときクリアフラグを立ててシーン遷移の入力を受け付ける
 
-    [SerializeField] GameObject _tutorial_action;
+    [SerializeField] GameObject _tutorial_action;                   //ゲーム初プレイ時に表示するチュートリアルポップアップ
     
     //パラメータ
     [SerializeField] private float _load_wait_time = 2.0f;                  //プレイヤーがDeadしてからロードされるまでの時間
@@ -28,9 +28,9 @@ public class GameManager : MonoBehaviour
 
     private string _sceneName = "StageScene";                               //ロードするシーン名
     private string _filePath;                                               //セーブデータの保存先
-    private Vector2 _playerStartPos = new Vector2(-5.5f, -4);                   //セーブデータがないときのプレイヤーの開始位置
-    private Vector2 _playerPosUp = new Vector2(0, 0.5f);                       //セーブポイント上空のプレイヤーの開始出現位置
-    private bool _isClear = false;
+    private Vector2 _playerStartPos = new Vector2(-5.5f, -4);               //セーブデータがないときのプレイヤーの開始位置
+    private Vector2 _playerPosUp = new Vector2(0, 0.5f);                    //セーブポイント上空のプレイヤーの開始出現位置
+    private bool _isClear = false;                                          //クリアフラグ、フラグが立つとタイトルシーンへ遷移するための入力を受け付ける
     private bool _isTutorial = false;                                       //チュートリアルが開いている状態
     
 
@@ -38,15 +38,15 @@ public class GameManager : MonoBehaviour
     public IObservable<Vector2> OnSaveStage => _saveStage;
     void Awake()
     {
-        _player = GameObject.FindWithTag("Player");                         //プレイヤー取得
-        _playerCore = _player.GetComponent<PlayerCore>();                   //プレイヤーの状態取得
-        _filePath = Application.dataPath + "/.savedata.json";               //セーブデータの保存先登録
-        _save = new SaveDataManager();                                      //セーブデータの管理先取得
-        _savePoints = FindObjectsOfType<SavePointController>();             //シーン上の全てセーブポイントを取得
-        _clearText = GameObject.FindWithTag("ClearText");
-        _clearTextController = _clearText.GetComponent<ClearTextController>();
+        _player = GameObject.FindWithTag("Player");                             //プレイヤー取得
+        _playerCore = _player.GetComponent<PlayerCore>();                       //プレイヤーの状態取得
+        _filePath = Application.dataPath + "/.savedata.json";                   //セーブデータの保存先登録
+        _save = new SaveDataManager();                                          //セーブデータの管理先取得
+        _savePoints = FindObjectsOfType<SavePointController>();                 //シーン上の全てセーブポイントを取得
+        _clearText = GameObject.FindWithTag("ClearText");                       //「Game Clear」と表示するテキストオブジェクト
+        _clearTextController = _clearText.GetComponent<ClearTextController>();  //表示されたときフラグを送信するスクリプトコンポーネント
 
-        _sceneName = "StageScene";
+        _sceneName = "StageScene";                                  //StageSceneはプレイヤーDead時にロードされるシーン
        
         Debug.Log($"ロード時のnowStagePos:{_save._nowStagePos}");
 
@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
                 .AddTo(this);
         }
 
+        //クリアテキストが表示されたときクリアフラグを立てる
         _clearTextController.OnClear
             .Subscribe(_ => _isClear = true)
             .AddTo(this);
@@ -95,10 +96,11 @@ public class GameManager : MonoBehaviour
        
         _player.transform.position = _save._nowSavePos + _playerPosUp;      //ロード時のプレイヤーの開始位置
 
+        //ゲーム初プレイのとき操作チュートリアルを表示する,このポップアップが表示されるのは初回プレイ時のみ
         if (!_save._isFisrtPlay)
         {
-            _save._isFisrtPlay = true;
-            Observable.Timer(TimeSpan.FromSeconds(_pop_up_wait_time))
+            _save._isFisrtPlay = true;                                  //セーブデータに書き込み
+            Observable.Timer(TimeSpan.FromSeconds(_pop_up_wait_time))   //一定時間経過後、チュートリアルを表示する
                 .Subscribe(_ =>
                 {
                     _isTutorial = true;
@@ -112,23 +114,26 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        //クリアフラグが立った時、入力を行うとタイトルシーンに戻る
         if (_isClear)
         {
             if (Input.anyKeyDown)
             {
-                _sceneName = "TitleScene";
-                _save._nowSavePos = _playerStartPos;
-                Save();
-                SceneManager.LoadScene(_sceneName);
+                _sceneName = "TitleScene";              //TitleSceneはゲーム起動時の最初のシーン、クリア時に戻ってくる
+                _save._nowSavePos = _playerStartPos;    //ゲーム開始位置を初期化
+                Save();                                 //ロード前にセーブを行う
+                SceneManager.LoadScene(_sceneName);     //タイトルシーンをロード
             }
         }
 
+        //操作用のチュートリアル表示中に移動入力を行うと一定時間経過後、チュートリアルが閉じる
         if (_isTutorial)
         {
             if (Input.GetKeyDown(KeyCode.W)||Input.GetKeyDown(KeyCode.A)||Input.GetKeyDown(KeyCode.S)||Input.GetKeyDown(KeyCode.D))
             {
                 _isTutorial = false;
-                _tutorial_action.GetComponent<PopUpController>().Close();
+                Observable.Timer(TimeSpan.FromSeconds(_pop_up_wait_time))
+                    .Subscribe(_=>_tutorial_action.GetComponent<PopUpController>().Close());
             }
         }
     }

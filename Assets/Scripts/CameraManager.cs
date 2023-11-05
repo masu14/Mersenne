@@ -49,8 +49,8 @@ public class CameraManager : MonoBehaviour
         {
             stageManager.OnPlayerEnter
                 .Subscribe(pos => {
-               // UpdateCameraPos(pos);    //本来はプレイヤーとステージの接触を検知したらカメラ処理のメソッドを呼び出すのが望ましい
-                _nowStage = stageManager.transform.position;        //代替案、接触したステージを_nowStageに格納
+               // UpdateCameraPos(pos);                                     //本来はプレイヤーとステージの接触を検知したらカメラ処理のメソッドを呼び出すのが望ましい
+                _nowStage = stageManager.transform.position;                //代替案、接触したステージを_nowStageに格納
             } )
                 .AddTo(this);
         }

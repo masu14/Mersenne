@@ -1,48 +1,32 @@
 using UnityEngine;
-using UniRx;
+
+/// <summary>
+/// tutorialオブジェクトに付けるスクリプトコンポーネント
+/// PopUpScaleControllerのサイズ変更の処理をつかってOpen,Closeのパラメータをインスペクターで変更できる
+/// ポップアップ処理はゲーム初プレイ時にGameManagerが，緑の床に触れたときTutorialSpotControllerがそれぞれ呼び出す
+/// </summary>
 
 public class PopUpController : MonoBehaviour
 {
-    public enum State
-    {
-        Open,
-        Close,
-        UnUsed
-    }
-
-    public State state { get; private set; }
-
-    public PopUpScaleController open, close;
+   
+    public PopUpScaleController open, close;        //それぞれのパラメータを定義してPlay()でサイズ変更
 
     void Start()
     {
-        open.Setup(gameObject);
-        open.scaleEndAsObservable.Subscribe(_ => state = State.Open);
-        close.Setup(gameObject);
-        close.scaleEndAsObservable.Subscribe(_ => state = State.Close);
+        open.Setup(gameObject);     //openにポップアップ画像のオブジェクトをセットする
+        close.Setup(gameObject);    //closeにポップアップ画像のオブジェクトをセットする
     }
 
+    //ポップアップが開く処理
     public void Open()
     {
         open.Play();
     }
 
+    //ポップアップが閉じる処理
     public void Close()
     {
         close.Play();
     }
 
-    public void Toggle()
-    {
-        switch (state)
-        {
-            case State.UnUsed:
-            case State.Close:
-                open.Play();
-                break;
-            case State.Open:
-                close.Play();
-                break;
-        }
-    }
 }

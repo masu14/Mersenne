@@ -22,7 +22,7 @@ public class StageManager : MonoBehaviour
         //プレイヤーを検知したときnowStageを更新
         if(collision.gameObject.tag == "Player")
         {
-            _playerEnter.OnNext(transform.position);
+            _playerEnter.OnNext(transform.position);                    //メインカメラにプレイヤーのいるステージを送信
         }
     }
 }

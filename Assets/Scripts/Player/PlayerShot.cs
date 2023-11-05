@@ -8,7 +8,7 @@ using Merusenne.Player.Shot;
 namespace Merusenne.Player
 {
     /// <summary>
-    /// プレイヤーのショットの発射の制御を行うクラス
+    /// プレイヤーのショットの発射の制御を行うスクリプトコンポーネント
     /// ショット本体の制御はShotControllerが行う
     /// </summary>
     public class PlayerShot : MonoBehaviour

@@ -43,8 +43,8 @@ namespace Merusenne.StageGimmick
             {
                 _saveLight.color = new Color32(252, 252, 252, 252);     //セーブポイントの色が変わる
                 Debug.Log("savepoint");
-                _savePoint.OnNext(_savePointPos);
-                _parentStage.OnNext(_parentStagePos);
+                _savePoint.OnNext(_savePointPos);                       //セーブポイントの座標を送信
+                _parentStage.OnNext(_parentStagePos);                   //セーブポイントのあるステージの座標を送信
             }
         }
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Merusenne.Player
 {
     /// <summary>
-    /// プレイヤーキャラのアニメーション処理を行うクラス
+    /// プレイヤーキャラのアニメーション処理を行うスクリプトコンポーネント
     /// アニメーターの実行タイミングを定義する
     /// 入力やプレイヤーの状態に応じてアニメーションを切り替える
     /// </summary>
@@ -16,7 +16,7 @@ namespace Merusenne.Player
         private PlayerCore _playerCore;                         //プレイヤーがDead状態になったときに使用する
         private IInputEventProvider _inputEventProvider;        //入力を取得する、入力に応じてモーションを切り替える
 
-        private bool _isClear = false;
+       
 
         //各種アニメーションの紐づけ
         private string _stopAnime = "PlayerStop";   //静止モーション(未入力時)
@@ -27,8 +27,8 @@ namespace Merusenne.Player
         private string _nowAnime = "";              //現在のフレームのモーション
         private string _oldAnime = "";              //1フレーム前のモーション
 
-        private const float _AXISHBORDER = 0.15f;    //横入力の閾値
-
+        private const float _AXISHBORDER = 0.15f;   //横入力の閾値
+        private bool _isClear = false;              //クリアフラグ
         private void Awake()
         {
             _animator = GetComponent<Animator>();                       //プレイヤーのAnimator取得
@@ -46,10 +46,12 @@ namespace Merusenne.Player
             _nowAnime = _stopAnime;
             _oldAnime = _stopAnime;
 
+            //クリアフラグの初期化
             _isClear = false;
         }
         void Update()
         {
+            //Clearフラグが立ったら処理を行わない
             if (_isClear) return;
             //プレイヤーがDead時には処理を行わない
             if (_playerCore.IsDead.Value) return;
@@ -94,6 +96,7 @@ namespace Merusenne.Player
 
         }
 
+        //Goal時にクリアフラグを立て、プレイヤーアニメーションを静止状態にする
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.gameObject.tag == "Goal")

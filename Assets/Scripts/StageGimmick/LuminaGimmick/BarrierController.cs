@@ -5,7 +5,7 @@ using UniRx;
 namespace Merusenne.StageGimmick.LuminaGimmick
 {
     /// <summary>
-    /// Barrierを制御するクラス
+    /// Barrierを制御するスクリプトコンポーネント
     /// Barrierは親オブジェクトのGimmickObjectにショットが衝突したときその色に応じて明滅する
     /// lightが点いているときコライダーがアクティブ、消えているとき非アクティブ状態になる
     /// </summary>
@@ -24,6 +24,7 @@ namespace Merusenne.StageGimmick.LuminaGimmick
         private Color32 _red = new Color32(231, 69, 69, 255);       //赤色
         private Color32 _clear = Color.clear;                       //無色
 
+        //Barrierのactive状態通知を送信する
         private readonly ReactiveProperty<bool> _barrierState = new ReactiveProperty<bool>();
         public IReadOnlyReactiveProperty<bool> OnBarrier => _barrierState;
 
@@ -44,9 +45,9 @@ namespace Merusenne.StageGimmick.LuminaGimmick
             //Barrierの初期化
             if (_barrierActive == false)
             {
-                _boxCollider2D.enabled = false;
-                _barrierState.Value = false;
-                _barrierLight.color = _clear;
+                _boxCollider2D.enabled = false; //コライダーを無効化
+                _barrierState.Value = false;    //active状態を通知
+                _barrierLight.color = _clear;   //透明にする
             }
 
             _barrierState.AddTo(this);

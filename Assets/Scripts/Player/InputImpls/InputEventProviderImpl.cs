@@ -4,7 +4,8 @@ using UnityEngine;
 namespace Merusenne.Player.InputImpls
 {
     /// <summary>
-    /// 入力を管理するクラス,ここで受け取った入力をUniRxを用いて他クラスに送信する
+    /// プレイヤーの入力を管理するスクリプトコンポーネント
+    /// ここで受け取った入力をUniRxを用いて他クラスに送信する
     /// 入力はIInputEventProviderインターフェースにあるもののみを許可し、それ以外はエラーとなる
     /// </summary>
     
